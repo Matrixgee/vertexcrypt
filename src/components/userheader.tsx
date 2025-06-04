@@ -66,7 +66,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ active, setActive }) => {
 
   const handleLogout = () => {
     // dispatch({ type: "user/clearUser" });
-    navigate("/auth/login");
+    navigate("/login");
     console.log("Logout clicked");
   };
 

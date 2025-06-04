@@ -8,6 +8,7 @@ import ContactPage from "../Pages/ContactPage";
 import ForgotPassword from "../Auth/forgetpassword";
 import ResetPassword from "../Auth/resetpassword";
 import Userlayout from "../Layout/userlayout";
+import ScrollToTop from "../components/scrolltotop";
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +29,13 @@ export const router = createBrowserRouter([
   },
   {
     path: "",
-    element: <Layout />,
+    element: (
+      <>
+        <ScrollToTop />
+        <Layout />
+      </>
+    ),
+
     children: [
       {
         path: "",
