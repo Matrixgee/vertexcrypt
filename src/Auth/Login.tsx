@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-green-200 to-green-300">
       <motion.div
@@ -15,6 +17,7 @@ const Login = () => {
           className="flex items-center mb-[23px] gap-2 cursor-pointer"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => navigate("/")}
         >
           <div className="w-7 h-7 bg-gradient-to-br from-green-400 to-green-600 rounded-md flex items-center justify-center">
             <TrendingUp className="w-6 h-6 text-white" />
