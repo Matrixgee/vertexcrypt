@@ -1,16 +1,29 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle, Calendar, Shield, CheckCircle, AlertCircle, ChevronUp, ChevronDown } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Send,
+  MessageCircle,
+  Calendar,
+  Shield,
+  CheckCircle,
+  AlertCircle,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-    investmentAmount: '',
-    inquiryType: 'general'
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+    investmentAmount: "",
+    inquiryType: "general",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
@@ -18,7 +31,7 @@ const ContactPage = () => {
   const handleInputChange = (e: any) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -34,7 +47,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-green-50 via-white to-green-100 min-h-screen">
+    <div className="bg-gradient-to-br from-green-50 via-white to-green-100 min-h-screen mt-12">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         {/* Background decorative elements */}
@@ -72,8 +85,9 @@ const ContactPage = () => {
               Contact VertexCrypt
             </h1>
             <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-8">
-              Ready to start your investment journey? Our expert team is here to help you
-              achieve your financial goals with personalized guidance and support.
+              Ready to start your investment journey? Our expert team is here to
+              help you achieve your financial goals with personalized guidance
+              and support.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-green-700">
               <span className="bg-green-100 px-4 py-2 rounded-full flex items-center">
@@ -104,7 +118,9 @@ const ContactPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">Get Started Today</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                Get Started Today
+              </h2>
 
               {isSubmitted && (
                 <motion.div
@@ -113,7 +129,9 @@ const ContactPage = () => {
                   animate={{ opacity: 1, scale: 1 }}
                 >
                   <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
-                  <span className="text-green-800">Thank you! We'll contact you within 24 hours.</span>
+                  <span className="text-green-800">
+                    Thank you! We'll contact you within 24 hours.
+                  </span>
                 </motion.div>
               )}
 
@@ -284,8 +302,10 @@ const ContactPage = () => {
                     <div>
                       <h4 className="font-semibold mb-1">Visit Us</h4>
                       <p className="text-green-100">
-                        200 Park Avenue<br />
-                        New York, NY 10166<br />
+                        200 Park Avenue
+                        <br />
+                        New York, NY 10166
+                        <br />
                         United States
                       </p>
                     </div>
@@ -298,7 +318,8 @@ const ContactPage = () => {
                     <div>
                       <h4 className="font-semibold mb-1">Business Hours</h4>
                       <p className="text-green-100">
-                        Mon - Fri: 8:00 AM - 8:00 PM EST<br />
+                        Mon - Fri: 8:00 AM - 8:00 PM EST
+                        <br />
                         Sat - Sun: 9:00 AM - 5:00 PM EST
                       </p>
                     </div>
@@ -317,7 +338,9 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">Live Chat</h4>
-                    <p className="text-sm text-gray-600">Get instant answers from our team</p>
+                    <p className="text-sm text-gray-600">
+                      Get instant answers from our team
+                    </p>
                   </div>
                 </motion.div>
 
@@ -329,8 +352,12 @@ const ContactPage = () => {
                     <Calendar className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800">Schedule Consultation</h4>
-                    <p className="text-sm text-gray-600">Book a free 30-minute session</p>
+                    <h4 className="font-semibold text-gray-800">
+                      Schedule Consultation
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      Book a free 30-minute session
+                    </p>
                   </div>
                 </motion.div>
               </div>
@@ -340,10 +367,14 @@ const ContactPage = () => {
                 <div className="flex items-start space-x-3">
                   <AlertCircle className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-semibold text-yellow-800 mb-2">Security Notice</h4>
+                    <h4 className="font-semibold text-yellow-800 mb-2">
+                      Security Notice
+                    </h4>
                     <p className="text-sm text-yellow-700 leading-relaxed">
-                      VertexCrypt will never ask for your passwords, Social Security number, or account
-                      details via email or phone. Always verify our identity before sharing sensitive information.
+                      VertexCrypt will never ask for your passwords, Social
+                      Security number, or account details via email or phone.
+                      Always verify our identity before sharing sensitive
+                      information.
                     </p>
                   </div>
                 </div>
@@ -362,9 +393,12 @@ const ContactPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Frequently Asked Questions
+            </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Quick answers to common questions about getting started with VertexCrypt
+              Quick answers to common questions about getting started with
+              VertexCrypt
             </p>
           </motion.div>
 
@@ -372,20 +406,24 @@ const ContactPage = () => {
             {[
               {
                 question: "What's the minimum investment?",
-                answer: "You can start investing with as little as $1,000. Our platform is designed to serve investors at all levels."
+                answer:
+                  "You can start investing with as little as $1,000. Our platform is designed to serve investors at all levels.",
               },
               {
                 question: "How long does account setup take?",
-                answer: "Most accounts are approved within 24-48 hours. You can start the process online and begin investing immediately after approval."
+                answer:
+                  "Most accounts are approved within 24-48 hours. You can start the process online and begin investing immediately after approval.",
               },
               {
                 question: "What fees do you charge?",
-                answer: "Our transparent fee structure starts at 0.25% annually with no hidden costs, trading fees, or account minimums."
+                answer:
+                  "Our transparent fee structure starts at 0.25% annually with no hidden costs, trading fees, or account minimums.",
               },
               {
                 question: "Is my money protected?",
-                answer: "Yes, all client accounts are SIPC protected up to $500,000, plus additional Lloyd's of London coverage for complete security."
-              }
+                answer:
+                  "Yes, all client accounts are SIPC protected up to $500,000, plus additional Lloyd's of London coverage for complete security.",
+              },
             ].map((faq, index) => (
               <motion.div
                 key={index}
@@ -398,7 +436,9 @@ const ContactPage = () => {
                   className="p-6 cursor-pointer flex items-center justify-between hover:bg-green-50 transition-colors"
                   onClick={() => toggleFAQ(index)}
                 >
-                  <h4 className="font-semibold text-gray-800">{faq.question}</h4>
+                  <h4 className="font-semibold text-gray-800">
+                    {faq.question}
+                  </h4>
                   <motion.div
                     animate={{ rotate: openFAQ === index ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
@@ -414,13 +454,15 @@ const ContactPage = () => {
                   initial={false}
                   animate={{
                     height: openFAQ === index ? "auto" : 0,
-                    opacity: openFAQ === index ? 1 : 0
+                    opacity: openFAQ === index ? 1 : 0,
                   }}
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden"
                 >
                   <div className="px-6 pb-6">
-                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    <p className="text-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 </motion.div>
               </motion.div>

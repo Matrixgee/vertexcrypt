@@ -1,9 +1,18 @@
 import { motion } from "framer-motion";
-import { Shield, Target, Award, Users, TrendingUp, Globe, CheckCircle, Zap } from "lucide-react";
+import {
+  Shield,
+  Target,
+  Award,
+  Users,
+  TrendingUp,
+  Globe,
+  CheckCircle,
+  Zap,
+} from "lucide-react";
 
 const AboutPage = () => {
   return (
-    <div className="bg-gradient-to-br from-green-50 via-white to-green-100 min-h-screen">
+    <div className="bg-gradient-to-br from-green-50 via-white to-green-100 min-h-screen mt-12">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         {/* Background decorative elements */}
@@ -41,13 +50,20 @@ const AboutPage = () => {
               About VertexCrypt
             </h1>
             <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-8">
-              Transforming the investment landscape through cutting-edge technology, 
-              expert guidance, and unwavering commitment to your financial success.
+              Transforming the investment landscape through cutting-edge
+              technology, expert guidance, and unwavering commitment to your
+              financial success.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-green-700">
-              <span className="bg-green-100 px-4 py-2 rounded-full">Founded 2020</span>
-              <span className="bg-green-100 px-4 py-2 rounded-full">SEC Registered</span>
-              <span className="bg-green-100 px-4 py-2 rounded-full">SIPC Protected</span>
+              <span className="bg-green-100 px-4 py-2 rounded-full">
+                Founded 2020
+              </span>
+              <span className="bg-green-100 px-4 py-2 rounded-full">
+                SEC Registered
+              </span>
+              <span className="bg-green-100 px-4 py-2 rounded-full">
+                SIPC Protected
+              </span>
             </div>
           </motion.div>
         </div>
@@ -62,23 +78,28 @@ const AboutPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="text-3xl font-bold text-gray-800 mb-6">Our Mission</h2>
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                Our Mission
+              </h2>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                We believe that sophisticated investment strategies shouldn't be reserved for the ultra-wealthy. 
-                Our mission is to democratize access to professional-grade investment tools and insights, 
-                empowering every individual to build lasting wealth regardless of their starting point.
+                We believe that sophisticated investment strategies shouldn't be
+                reserved for the ultra-wealthy. Our mission is to democratize
+                access to professional-grade investment tools and insights,
+                empowering every individual to build lasting wealth regardless
+                of their starting point.
               </p>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Through innovative technology, transparent practices, and personalized guidance, we're breaking 
-                down the barriers that have traditionally kept advanced investment strategies out of reach for 
-                everyday investors.
+                Through innovative technology, transparent practices, and
+                personalized guidance, we're breaking down the barriers that
+                have traditionally kept advanced investment strategies out of
+                reach for everyday investors.
               </p>
               <div className="space-y-4">
                 {[
-                  'AI-powered portfolio optimization',
-                  'Transparent fee structure with no hidden costs',
-                  'Bank-level security and regulatory compliance',
-                  'Educational resources and expert insights'
+                  "AI-powered portfolio optimization",
+                  "Transparent fee structure with no hidden costs",
+                  "Bank-level security and regulatory compliance",
+                  "Educational resources and expert insights",
                 ].map((item, index) => (
                   <motion.div
                     key={index}
@@ -104,15 +125,17 @@ const AboutPage = () => {
               <h3 className="text-2xl font-bold mb-6">Our Impact by Numbers</h3>
               <div className="grid grid-cols-2 gap-6">
                 {[
-                  { number: '$2.5B+', label: 'Assets Under Management' },
-                  { number: '50,000+', label: 'Happy Investors' },
-                  { number: '12.5%', label: 'Avg Annual Returns' },
-                  { number: '99.9%', label: 'Platform Uptime' },
-                  { number: '4.9/5', label: 'Customer Rating' },
-                  { number: '180+', label: 'Countries Served' }
+                  { number: "$2.5B+", label: "Assets Under Management" },
+                  { number: "50,000+", label: "Happy Investors" },
+                  { number: "12.5%", label: "Avg Annual Returns" },
+                  { number: "99.9%", label: "Platform Uptime" },
+                  { number: "4.9/5", label: "Customer Rating" },
+                  { number: "180+", label: "Countries Served" },
                 ].map((stat, index) => (
                   <div key={index} className="text-center">
-                    <div className="text-2xl font-bold text-green-100 mb-1">{stat.number}</div>
+                    <div className="text-2xl font-bold text-green-100 mb-1">
+                      {stat.number}
+                    </div>
                     <div className="text-sm text-green-200">{stat.label}</div>
                   </div>
                 ))}
@@ -131,9 +154,12 @@ const AboutPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Our Core Values</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Our Core Values
+            </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              These principles guide every decision we make and every innovation we pursue
+              These principles guide every decision we make and every innovation
+              we pursue
             </p>
           </motion.div>
 
@@ -141,24 +167,28 @@ const AboutPage = () => {
             {[
               {
                 icon: Shield,
-                title: 'Security First',
-                description: 'Bank-level encryption and multi-layered security protocols protect your investments and personal data.'
+                title: "Security First",
+                description:
+                  "Bank-level encryption and multi-layered security protocols protect your investments and personal data.",
               },
               {
                 icon: Target,
-                title: 'Precision Focus',
-                description: 'Data-driven strategies and algorithmic precision ensure optimal portfolio performance and risk management.'
+                title: "Precision Focus",
+                description:
+                  "Data-driven strategies and algorithmic precision ensure optimal portfolio performance and risk management.",
               },
               {
                 icon: Zap,
-                title: 'Innovation',
-                description: 'Cutting-edge AI technology and continuous platform improvements keep you ahead of market trends.'
+                title: "Innovation",
+                description:
+                  "Cutting-edge AI technology and continuous platform improvements keep you ahead of market trends.",
               },
               {
                 icon: Users,
-                title: 'Client-Centric',
-                description: 'Your financial goals are our priority, with personalized service and dedicated support teams.'
-              }
+                title: "Client-Centric",
+                description:
+                  "Your financial goals are our priority, with personalized service and dedicated support teams.",
+              },
             ].map((value, index) => (
               <motion.div
                 key={index}
@@ -171,8 +201,12 @@ const AboutPage = () => {
                 <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <value.icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                <h3 className="text-xl font-bold text-gray-800 mb-3">
+                  {value.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {value.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -180,7 +214,7 @@ const AboutPage = () => {
       </section>
 
       {/* Leadership Team */}
-      <section className="py-16">
+      {/* <section className="py-16">
         <div className="container mx-auto px-4">
           <motion.div
             className="text-center mb-12"
@@ -242,7 +276,7 @@ const AboutPage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Why Choose Us */}
       <section className="py-16 bg-white/50">
@@ -253,7 +287,9 @@ const AboutPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h3 className="text-3xl font-bold text-gray-800 mb-8 text-center">Why Choose VertexCrypt?</h3>
+            <h3 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+              Why Choose VertexCrypt?
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
@@ -262,8 +298,9 @@ const AboutPage = () => {
                     Advanced Technology
                   </h4>
                   <p className="text-gray-600 leading-relaxed">
-                    Our proprietary algorithms analyze over 10,000 data points daily, providing real-time 
-                    portfolio optimization and risk management that adapts to changing market conditions.
+                    Our proprietary algorithms analyze over 10,000 data points
+                    daily, providing real-time portfolio optimization and risk
+                    management that adapts to changing market conditions.
                   </p>
                 </div>
                 <div>
@@ -272,8 +309,9 @@ const AboutPage = () => {
                     Global Reach, Local Service
                   </h4>
                   <p className="text-gray-600 leading-relaxed">
-                    Serving investors across 180+ countries with localized support, currency options, 
-                    and compliance with regional financial regulations.
+                    Serving investors across 180+ countries with localized
+                    support, currency options, and compliance with regional
+                    financial regulations.
                   </p>
                 </div>
               </div>
@@ -284,8 +322,9 @@ const AboutPage = () => {
                     Proven Performance
                   </h4>
                   <p className="text-gray-600 leading-relaxed">
-                    Track record of consistent returns with our diversified portfolios averaging 12.5% 
-                    annual growth while maintaining optimal risk-adjusted performance.
+                    Track record of consistent returns with our diversified
+                    portfolios averaging 12.5% annual growth while maintaining
+                    optimal risk-adjusted performance.
                   </p>
                 </div>
                 <div>
@@ -294,8 +333,9 @@ const AboutPage = () => {
                     Regulatory Excellence
                   </h4>
                   <p className="text-gray-600 leading-relaxed">
-                    Fully registered with SEC and FINRA, SIPC protection up to $500,000, plus additional 
-                    Lloyd's of London coverage for complete peace of mind.
+                    Fully registered with SEC and FINRA, SIPC protection up to
+                    $500,000, plus additional Lloyd's of London coverage for
+                    complete peace of mind.
                   </p>
                 </div>
               </div>
