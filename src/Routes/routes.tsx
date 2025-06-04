@@ -7,6 +7,7 @@ import AboutPage from "../Pages/AboutPage";
 import ContactPage from "../Pages/ContactPage";
 import ForgotPassword from "../Auth/forgetpassword";
 import ResetPassword from "../Auth/resetpassword";
+import Userlayout from "../Layout/userlayout";
 
 export const router = createBrowserRouter([
   {
@@ -42,5 +43,10 @@ export const router = createBrowserRouter([
         element: <ContactPage />,
       },
     ],
+  },
+
+  {
+    path: "user",
+    element: <Userlayout />,
   },
 ]);
