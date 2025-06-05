@@ -1,13 +1,18 @@
 import { motion } from "framer-motion";
 import { ArrowRight, DollarSign, TrendingUp, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import bg from "../assets/bg.jpg"
+import bg from "../assets/bgtry.jpg"
+// import bg from "../assets/hero.jpg"
 
 const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{background:`url(${bg})`}} className="relative min-h-[70vh] flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-100 overflow-hidden">
+    <section style={{ 
+  backgroundImage: `url(${bg})`, 
+  backgroundSize: "cover", 
+  backgroundRepeat: "no-repeat" 
+}} className="relative min-h-[70vh] bg-center flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-100 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 to-green-600/10" />
       <div className="absolute inset-0">
         {[...Array(6)].map((_, i) => (
