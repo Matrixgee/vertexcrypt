@@ -58,19 +58,19 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-4">
             <motion.button
               onClick={() => navigate("/login")}
-              className="px-4 py-2 text-green-600 cursor-pointer font-medium hover:text-green-700 transition-colors"
+              className="px-4 py-2 text-green-600 border-1 border-green-600 cursor-pointer font-medium hover:text-white rounded-lg hover:bg-gradient-to-r from-green-500 to-green-600 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Sign In
+              Login
             </motion.button>
             <motion.button
               onClick={() => navigate("/register")}
-              className="px-6 py-2 cursor-pointer bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-green-700 transition-all shadow-lg hover:shadow-xl"
+              className="px-6 py-2 cursor-pointer border-1 border-green-600 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-green-700 transition-all shadow-lg hover:shadow-xl"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              Get Started
+              Register
             </motion.button>
           </div>
 

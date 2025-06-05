@@ -140,7 +140,7 @@ const Overview = () => {
 
           {/* Trading Chart Section */}
           <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
-            <div className="flex flex-col items-center justify-between mb-6">
+            <div className="flex flex-col items-center justify-between gap-5">
               <div className="w-full">
                 <h2 className="text-xl font-bold text-white mb-1 flex items-center">
                   <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
@@ -148,7 +148,7 @@ const Overview = () => {
                 </h2>
                 <p className="text-slate-300">Real-time market data and trends</p>
               </div>
-              <div>
+              <div className="w-full h-[550px] flex items-center">
                 <TradinfviewWidgetone/>
               </div>
             </div>

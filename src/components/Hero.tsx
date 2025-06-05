@@ -1,13 +1,18 @@
 import { motion } from "framer-motion";
 import { ArrowRight, DollarSign, TrendingUp, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import bg from "../assets/bg.jpg"
+import bg from "../assets/bgtry.jpg"
+// import bg from "../assets/hero.jpg"
 
 const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{background:`url(${bg})`}} className="relative min-h-[70vh] flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-100 overflow-hidden">
+    <section style={{ 
+  backgroundImage: `url(${bg})`, 
+  backgroundSize: "cover", 
+  backgroundRepeat: "no-repeat" 
+}} className="relative min-h-[70vh] bg-center flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-100 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 to-green-600/10" />
       <div className="absolute inset-0">
         {[...Array(6)].map((_, i) => (
@@ -36,19 +41,19 @@ const Hero = () => {
       <div className="container mx-auto px-4 py-16 md:py-23 relative z-10 mt-12">
         <div className="max-w-3xl mx-auto text-center">
           <motion.h1
-            className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-600 via-green-700 to-green-800 bg-clip-text text-transparent"
+            className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-500 via-green-600 to-green-700 bg-clip-text text-transparent"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             Invest Smarter, <br />
-            <span className="bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent">
               Grow Faster
             </span>
           </motion.h1>
 
           <motion.p
-            className="text-base md:text-lg text-gray-600 mb-6 leading-relaxed"
+            className="text-base md:text-lg text-gray-100 mb-6 leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -97,7 +102,7 @@ const Hero = () => {
             ].map((stat, index) => (
               <motion.div
                 key={index}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-green-100"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-green-100"
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
