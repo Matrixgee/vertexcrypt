@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Register = () => {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-green-200 to-green-300">
+    <section className="min-h-screen py-4 flex items-center justify-center bg-gradient-to-br from-green-100 via-green-200 to-green-300">
       <motion.div
         className="w-full max-w-md p-8 bg-white/70 flex flex-col items-center backdrop-blur-md rounded-2xl shadow-xl border border-green-100"
         initial={{ opacity: 0, y: 40 }}
