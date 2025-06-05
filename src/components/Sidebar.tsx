@@ -166,6 +166,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive }) => {
             position: fixed;
             left: -20rem;
             top: 0;
+            bottom:0;
             z-index: 30;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border-right: 1px solid rgba(34, 197, 94, 0.2);
