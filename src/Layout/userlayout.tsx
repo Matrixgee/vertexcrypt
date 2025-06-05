@@ -12,7 +12,9 @@ const Userlayout = () => {
       <Sidebar active={active} setActive={setActive} />
       <div className=" w-full h-full bg-green-100">
         <UserHeader active={active} setActive={setActive} />
-        <Outlet />
+        <main className="flex-1 overflow-y-auto"> 
+          <Outlet />
+        </main>
       </div>
     </div>
   );
