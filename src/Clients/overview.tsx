@@ -31,22 +31,14 @@ const Overview = () => {
       color: 'from-emerald-400 to-emerald-600',
       bgColor: 'bg-slate-800'
     },
-    {
-      title: 'Total Bonus',
-      value: '$50',
-      percentage: '+5.1%',
-      icon: <Gift className="w-6 h-6" />,
-      color: 'from-green-300 to-green-500',
-      bgColor: 'bg-slate-800'
-    },
-    {
-      title: 'Referral Bonus',
-      value: '$0',
-      percentage: '+15.3%',
-      icon: <Users className="w-6 h-6" />,
-      color: 'from-green-400 to-emerald-500',
-      bgColor: 'bg-slate-800'
-    },
+    // {
+    //   title: 'Total Bonus',
+    //   value: '$50',
+    //   percentage: '+5.1%',
+    //   icon: <Gift className="w-6 h-6" />,
+    //   color: 'from-green-300 to-green-500',
+    //   bgColor: 'bg-slate-800'
+    // },
     {
       title: 'Investment Plan',
       value: '0',
@@ -106,7 +98,7 @@ const Overview = () => {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {statsCards.map((card, index) => (
               <div 
                 key={index}
