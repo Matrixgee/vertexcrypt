@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import one from '../assets/one.jpg'
+import two from '../assets/two.jpg'
+import three from '../assets/three.jpg'
 
 
 const Testimonials = () => {
@@ -8,19 +11,22 @@ const Testimonials = () => {
       name: 'Sarah Martinez',
       role: 'Small Business Owner',
       content: 'VertexCrypt helped me grow my retirement savings by 40% in just two years. The AI recommendations are spot-on!',
-      rating: 5
+      rating: 5,
+      image: one
     },
     {
       name: 'James Thompson',
       role: 'Software Engineer',
       content: 'Love the mobile app! I can track my investments anywhere and the automated rebalancing saves me so much time.',
-      rating: 5
+      rating: 5,
+      image: two
     },
     {
       name: 'Emily Chen',
       role: 'Medical Professional',
       content: 'Finally, an investment platform that makes sense. The educational resources helped me understand my portfolio better.',
-      rating: 5
+      rating: 5,
+      image: three
     }
   ];
 
@@ -63,9 +69,7 @@ const Testimonials = () => {
               </p>
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">
-                    {testimonial.name.charAt(0)}
-                  </span>
+                  <img style={{objectFit:"cover"}} src={testimonial.image} alt="" className="rounded-full w-[100%] h-[100%]" />
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-800">{testimonial.name}</h4>
