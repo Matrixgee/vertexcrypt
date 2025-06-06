@@ -7,8 +7,7 @@ import logo from '../assets/vertextone.png'
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ get current path
-
+  const location = useLocation(); 
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
