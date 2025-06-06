@@ -62,35 +62,35 @@ export const router = createBrowserRouter([
   {
     path: "user",
     element: <Userlayout />,
-    children:[
+    children: [
       {
-        path:"overview",
-        element:<Overview/>
+        path: "overview",
+        element: <Overview />,
       },
       {
-        path:"deposit",
-        element:<Deposit/>
+        path: "deposit",
+        element: <Deposit />,
       },
       {
-        path:"withdraw",
-        element:<Withdraw/>
+        path: "withdraw",
+        element: <Withdraw />,
       },
       {
-        path:"support",
-        element:<Support/>
+        path: "support",
+        element: <Support />,
       },
       {
-        path:"history",
-        element:<History/>
+        path: "history",
+        element: <History />,
       },
       {
-        path:"packages",
-        element:<Packages/>
+        path: "packages",
+        element: <Packages />,
       },
       {
-        path:"my-plans",
-        element:<Plans/>
-      }
-    ]
+        path: "my-plans",
+        element: <Plans />,
+      },
+    ],
   },
 ]);
