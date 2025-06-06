@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import logo from '../assets/vertextone.png'
+import logo from "../assets/vertextone.png";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  console.log(`VITE_DEVE_URL = https://vert-w5v9.onrender.com/api`);
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-green-200 to-green-300">
