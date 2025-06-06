@@ -19,7 +19,7 @@ const Login = () => {
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate("/")}
         >
-          <img src={logo} alt="" className="h-[55px] w-[70px]" />
+          <img src={logo} alt="" className="h-[50px] w-[95px]" />
         </motion.div>
         <h2 className="text-2xl font-bold text-green-700 text-center mb-6">
           Welcome Back

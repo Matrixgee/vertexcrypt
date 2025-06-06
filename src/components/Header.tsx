@@ -7,8 +7,7 @@ import logo from '../assets/vertextone.png'
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ get current path
-
+  const location = useLocation(); 
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -30,7 +29,7 @@ const Header = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src={logo} alt="" className="h-[55px] w-[70px]" />
+            <img src={logo} alt="" className="h-[50px] w-[95px]" />
           </motion.div>
 
           {/* Desktop Navigation */}
