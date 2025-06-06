@@ -14,8 +14,8 @@ import History from "../Clients/History";
 import Packages from "../Clients/Packages";
 import Plans from "../Clients/Plans";
 import Withdraw from "../Clients/Withdraw";
-import Overview from "../Clients/Overview";
-import Deposit from "../Clients/Deposit";
+
+
 
 export const router = createBrowserRouter([
   {
@@ -63,14 +63,6 @@ export const router = createBrowserRouter([
     path: "user",
     element: <Userlayout />,
     children: [
-      {
-        path: "overview",
-        element: <Overview />,
-      },
-      {
-        path: "deposit",
-        element: <Deposit />,
-      },
       {
         path: "withdraw",
         element: <Withdraw />,
