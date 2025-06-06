@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TrendingUp } from "lucide-react";
+import logo from '../assets/vertextone.png'
 import { Link } from "react-router-dom";
 
 const Register = () => {
@@ -17,12 +17,7 @@ const Register = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <div className="w-7 h-7 bg-gradient-to-br from-green-400 to-green-600 rounded-md flex items-center justify-center">
-            <TrendingUp className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent">
-            VertexCrypt
-          </span>
+          <img src={logo} alt="" className="h-[55px] w-[70px]" />
         </motion.div>
 
         {/* Title */}
