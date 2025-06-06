@@ -1,9 +1,7 @@
 
 import { 
   DollarSign, 
-  TrendingUp, 
-  Gift, 
-  Users, 
+  TrendingUp,  
   Activity, 
   Target, 
   Wallet, 
