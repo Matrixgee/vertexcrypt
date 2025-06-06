@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <img src={logo} alt="" className="h-[55px] w-[70px]" />
+              <img src={logo} alt="" className="h-[50px] w-[95px]" />
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               Your trusted partner in building wealth through smart investments. 

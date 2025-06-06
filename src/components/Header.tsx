@@ -30,7 +30,7 @@ const Header = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src={logo} alt="" className="h-[55px] w-[70px]" />
+            <img src={logo} alt="" className="h-[50px] w-[95px]" />
           </motion.div>
 
           {/* Desktop Navigation */}
