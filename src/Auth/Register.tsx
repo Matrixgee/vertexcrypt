@@ -19,7 +19,7 @@ const Register = () => {
     confirmPassword: "",
   });
 
-  console.log(`VITE_DEVE_URL = ${import.meta.env.VITE_DEVE_URL}`);
+  // console.log(`VITE_DEVE_URL = ${import.meta.env.VITE_DEVE_URL}`);
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -66,6 +66,9 @@ const Register = () => {
         phoneNumber: "",
         password: "",
         confirmPassword: "",
+      });
+      setTimeout(() => {
+        window.location.href = "/review";
       });
     } catch (error: any) {
       if (isAxiosError(error)) {
