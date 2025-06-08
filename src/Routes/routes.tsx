@@ -16,6 +16,7 @@ import Plans from "../Clients/Plans";
 import Withdraw from "../Clients/Withdraw";
 import Deposit from "../Clients/Deposits";
 import Overview from "../Clients/Overview";
+import Review from "../Pages/review";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: "contact",
         element: <ContactPage />,
+      },
+      {
+        path: "review",
+        element: <Review />,
       },
     ],
   },

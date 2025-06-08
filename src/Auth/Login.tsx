@@ -10,30 +10,35 @@ const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
-  })
+    password: "",
+  });
 
-
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  }
-
-
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    setLoading(true)
-    const loadingId = toast.loading("Please wait")
+    setLoading(true);
+    const loadingId = toast.loading("Please wait");
     try {
-      const res = await axios.post("/user/login", formData)
-      console.log(res)
+      const res = await axios.post("/user/login", formData);
+      console.log(res);
+      toast.success("Login Successful");
+      setTimeout(() => {
+        if (res.data.data.isAdmin) {
+          navigate("/welcome/admin");
+        } else {
+          navigate("/user/overview");
+        }
+      }, 3000);
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         const errorMsg =
@@ -42,15 +47,14 @@ const Login = () => {
       } else {
         toast.error("Error occurred");
       }
-      setFormData({email:"", password:""})
+      setFormData({ email: "", password: "" });
     } finally {
-      setLoading(false)
-      toast.dismiss(loadingId)
+      setLoading(false);
+      toast.dismiss(loadingId);
     }
-  }
+  };
 
-
-  console.log(`VITE_DEVE_URL = https://vert-w5v9.onrender.com/api`);
+  // console.log(`VITE_DEVE_URL = https://vert-w5v9.onrender.com/api`);
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-green-200 to-green-300">
