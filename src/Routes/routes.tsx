@@ -14,8 +14,8 @@ import History from "../Clients/History";
 import Packages from "../Clients/Packages";
 import Plans from "../Clients/Plans";
 import Withdraw from "../Clients/Withdraw";
-import Overview from "../Clients/overview";
-import Deposit from "../Clients/deposit";
+import Deposit from "../Clients/Deposit";
+import Overview from "../Clients/Overview";
 
 export const router = createBrowserRouter([
   {
