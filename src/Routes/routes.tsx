@@ -20,6 +20,8 @@ import Review from "../Pages/review";
 import Adminlayout from "../Layout/Adminlayout";
 import AdminOverview from "../Admin/adminoverview";
 import Allusers from "../Admin/allusers";
+import AllWithdrawal from "../Admin/allwithdrawal";
+import AllTransactions from "../Admin/allTransactions";
 
 export const router = createBrowserRouter([
   {
@@ -115,6 +117,14 @@ export const router = createBrowserRouter([
         path: "allusers",
         element: <Allusers />,
       },
+      {
+        path:"withdrawals",
+        element:<AllWithdrawal/>
+      },
+      {
+        path:"transactions",
+        element:<AllTransactions/>
+      }
     ],
   },
 ]);
