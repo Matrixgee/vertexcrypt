@@ -29,6 +29,13 @@ const mockWithdrawals = [
   },
 ];
 
+const statusColors = {
+  pending: "bg-yellow-100 text-yellow-700",
+  processing: "bg-blue-100 text-blue-700",
+  approved: "bg-green-100 text-green-700",
+  rejected: "bg-red-100 text-red-700",
+};
+
 const AllWithdrawal = () => {
   const [withdrawals, setWithdrawals] = useState(mockWithdrawals);
 
@@ -42,73 +49,74 @@ const AllWithdrawal = () => {
   };
 
   return (
-    <div className="w-full h-full scrollbar overflow-y-scroll">
-      <div className="w-full px-5 pt-5">
-        <p className="text-3xl font-bold text-gray-500 max-md:text-xl">
-          Manage Client Withdrawals
-        </p>
-      </div>
+    <div className="h-full w-full p-6 bg-green-50">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">
+        Manage Client Withdrawals
+      </h1>
 
-      <div className="w-full px-5 mt-4 overflow-x-auto">
-        <table className="w-full text-left border-collapse min-w-[800px]">
-          <thead className="bg-gray-200">
+      <div className="overflow-x-auto bg-white rounded-xl shadow">
+        <table className="min-w-[900px] w-full text-sm text-left">
+          <thead className="bg-green-100 text-gray-600 uppercase text-xs">
             <tr>
-              <th className="p-3 border">ID</th>
-              <th className="p-3 border">Client Name</th>
-              <th className="p-3 border">Amount</th>
-              <th className="p-3 border">Method</th>
-              <th className="p-3 border">Status</th>
-              <th className="p-3 border">Date</th>
-              <th className="p-3 border">Actions</th>
+              <th className="px-4 py-3">ID</th>
+              <th className="px-4 py-3">Client</th>
+              <th className="px-4 py-3">Amount</th>
+              <th className="px-4 py-3">Method</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
             {withdrawals.map((withdrawal) => (
-              <tr key={withdrawal._id}>
-                <td className="p-3 border">{withdrawal._id.slice(0, 6)}</td>
-                <td className="p-3 border">
-                  {withdrawal.userId?.userName || "N/A"}
+              <tr
+                key={withdrawal._id}
+                className="hover:bg-gray-50 transition-colors"
+              >
+                <td className="px-4 py-3 font-mono text-gray-700">
+                  {withdrawal._id.slice(0, 6)}
                 </td>
-                <td className="p-3 border">${withdrawal.amount}</td>
-                <td className="p-3 border">{withdrawal.mode}</td>
-                <td className="p-3 border">
+                <td className="px-4 py-3">{withdrawal.userId?.userName}</td>
+                <td className="px-4 py-3 font-semibold text-gray-800">
+                  ${withdrawal.amount}
+                </td>
+                <td className="px-4 py-3">{withdrawal.mode}</td>
+                <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 rounded capitalize ${
-                      withdrawal.status === "pending"
-                        ? "bg-yellow-500 text-white"
-                        : withdrawal.status === "approved"
-                        ? "bg-green-500 text-white"
-                        : withdrawal.status === "processing"
-                        ? "bg-blue-500 text-white"
-                        : "bg-red-500 text-white"
+                    className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
+                      statusColors[
+                        withdrawal.status as keyof typeof statusColors
+                      ]
                     }`}
                   >
                     {withdrawal.status}
                   </span>
                 </td>
-                <td className="p-3 border">{withdrawal.date}</td>
-                <td className="p-3 border flex flex-wrap gap-2">
-                  <button
-                    onClick={() => updateStatus(withdrawal._id, "approved")}
-                    className="bg-green-500 text-white px-3 py-1 rounded"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => updateStatus(withdrawal._id, "processing")}
-                    className="bg-blue-500 text-white px-3 py-1 rounded"
-                  >
-                    Processing
-                  </button>
-                  <button
-                    onClick={() => updateStatus(withdrawal._id, "rejected")}
-                    className="bg-red-500 text-white px-3 py-1 rounded"
-                  >
-                    Decline
-                  </button>
-                  <button className="text-blue-500">
-                    <FaEye />
-                  </button>
+                <td className="px-4 py-3">{withdrawal.date}</td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={() => updateStatus(withdrawal._id, "approved")}
+                      className="text-green-600 border border-green-200 bg-green-50 hover:bg-green-100 px-3 py-1 rounded text-xs font-medium"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => updateStatus(withdrawal._id, "processing")}
+                      className="text-blue-600 border border-blue-200 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded text-xs font-medium"
+                    >
+                      Process
+                    </button>
+                    <button
+                      onClick={() => updateStatus(withdrawal._id, "rejected")}
+                      className="text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 px-3 py-1 rounded text-xs font-medium"
+                    >
+                      Decline
+                    </button>
+                    <button className="text-gray-500 hover:text-blue-600 p-2">
+                      <FaEye className="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
