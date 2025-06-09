@@ -32,12 +32,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ active, setActive }) => {
     {
       name: "All Transactions",
       icon: <CreditCard className="w-5 h-5" />,
-      path: "/admin/transactions",
+      path: "/admin/alltransactions",
     },
     {
       name: "All Withdrawals",
       icon: <ArrowUpFromLine className="w-5 h-5" />,
-      path: "/admin/withdrawals",
+      path: "/admin/allwithdrawals",
     },
     {
       name: "All Users",
