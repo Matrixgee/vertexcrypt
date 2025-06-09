@@ -17,6 +17,8 @@ import Withdraw from "../Clients/Withdraw";
 import Deposit from "../Clients/Deposits";
 import Overview from "../Clients/Overview";
 import Review from "../Pages/review";
+import Adminlayout from "../Layout/Adminlayout";
+import AdminOverview from "../Admin/adminoverview";
 
 export const router = createBrowserRouter([
   {
@@ -96,6 +98,17 @@ export const router = createBrowserRouter([
       {
         path: "my-plans",
         element: <Plans />,
+      },
+    ],
+  },
+
+  {
+    path: "admin",
+    element: <Adminlayout />,
+    children: [
+      {
+        path: "adminhome",
+        element: <AdminOverview />,
       },
     ],
   },
