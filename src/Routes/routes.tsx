@@ -19,6 +19,7 @@ import Overview from "../Clients/Overview";
 import Review from "../Pages/review";
 import Adminlayout from "../Layout/Adminlayout";
 import AdminOverview from "../Admin/adminoverview";
+import Allusers from "../Admin/allusers";
 
 export const router = createBrowserRouter([
   {
@@ -109,6 +110,10 @@ export const router = createBrowserRouter([
       {
         path: "adminhome",
         element: <AdminOverview />,
+      },
+      {
+        path: "allusers",
+        element: <Allusers />,
       },
     ],
   },

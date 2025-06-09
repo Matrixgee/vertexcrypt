@@ -42,7 +42,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ active, setActive }) => {
     {
       name: "All Users",
       icon: <Users className="w-5 h-5" />,
-      path: "/admin/users",
+      path: "/admin/allusers",
     },
   ];
 

@@ -56,34 +56,6 @@ const AdminOverview = () => (
         <p className="text-xs text-orange-600 mt-2">↗ 3% from last month</p>
       </div>
     </div>
-
-    {/* Recent Activity */}
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">
-        Recent Activity
-      </h3>
-      <div className="space-y-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-          <p className="text-sm text-gray-600">
-            New user registration: John Smith
-          </p>
-          <span className="text-xs text-gray-400">2 minutes ago</span>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-          <p className="text-sm text-gray-600">
-            Transaction completed: $500.00
-          </p>
-          <span className="text-xs text-gray-400">5 minutes ago</span>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-          <p className="text-sm text-gray-600">Withdrawal request: $200.00</p>
-          <span className="text-xs text-gray-400">10 minutes ago</span>
-        </div>
-      </div>
-    </div>
   </div>
 );
 export default AdminOverview;
