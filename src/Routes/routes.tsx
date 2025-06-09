@@ -118,6 +118,7 @@ export const router = createBrowserRouter([
         element: <Allusers />,
       },
       {
+
         path: "allwithdrawals",
         element: <AllWithdrawal />,
       },
@@ -125,6 +126,7 @@ export const router = createBrowserRouter([
         path: "alltransactions",
         element: <AllTransactions />,
       },
+
     ],
   },
 ]);

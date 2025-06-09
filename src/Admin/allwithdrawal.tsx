@@ -29,12 +29,14 @@ const mockWithdrawals = [
   },
 ];
 
+
 const statusColors = {
   pending: "bg-yellow-100 text-yellow-700",
   processing: "bg-blue-100 text-blue-700",
   approved: "bg-green-100 text-green-700",
   rejected: "bg-red-100 text-red-700",
 };
+
 
 const AllWithdrawal = () => {
   const [withdrawals, setWithdrawals] = useState(mockWithdrawals);
@@ -49,6 +51,7 @@ const AllWithdrawal = () => {
   };
 
   return (
+
     <div className="h-full w-full p-6 bg-green-50">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">
         Manage Client Withdrawals
@@ -87,11 +90,13 @@ const AllWithdrawal = () => {
                       statusColors[
                         withdrawal.status as keyof typeof statusColors
                       ]
+
                     }`}
                   >
                     {withdrawal.status}
                   </span>
                 </td>
+
                 <td className="px-4 py-3">{withdrawal.date}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap items-center gap-2">
@@ -117,6 +122,7 @@ const AllWithdrawal = () => {
                       <FaEye className="w-4 h-4" />
                     </button>
                   </div>
+
                 </td>
               </tr>
             ))}
