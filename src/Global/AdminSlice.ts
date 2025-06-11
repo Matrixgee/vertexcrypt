@@ -1,3 +1,4 @@
+
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -66,3 +67,4 @@ export const {
 } = AdminSlice.actions;
 
 export default AdminSlice.reducer;
+

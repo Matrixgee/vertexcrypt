@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -72,3 +73,4 @@ export const {
 } = UserSlice.actions;
 
 export default UserSlice.reducer;
+
