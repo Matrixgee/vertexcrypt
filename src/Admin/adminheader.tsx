@@ -57,7 +57,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ active, setActive }) => {
   };
 
   const handleLogout = () => {
-    navigate("/admin/login");
+    navigate("/login");
     console.log("Admin logout clicked");
   };
 
@@ -74,23 +74,23 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ active, setActive }) => {
     {
       label: "Admin Profile",
       icon: <User className="w-5 h-5" />,
-      path: "/admin/profile",
+      path: "/admin/adminhome",
     },
     {
       label: "System Settings",
       icon: <Settings className="w-5 h-5" />,
-      path: "/admin/settings",
+      path: "/admin/adminhome",
     },
     {
       label: "Notifications",
       icon: <Bell className="w-5 h-5" />,
-      path: "/admin/notifications",
+      path: "/admin/adminhome",
       mobileOnly: true,
     },
     {
       label: "Admin Tools",
       icon: <Shield className="w-5 h-5" />,
-      path: "/admin/tools",
+      path: "/admin/adminhome",
     },
   ];
 

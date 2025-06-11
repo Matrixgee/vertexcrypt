@@ -22,6 +22,7 @@ import AdminOverview from "../Admin/adminoverview";
 import Allusers from "../Admin/allusers";
 import AllWithdrawal from "../Admin/allwithdrawal";
 import AllTransactions from "../Admin/allTransactions";
+import UserDetails from "../Admin/userdetails";
 
 export const router = createBrowserRouter([
   {
@@ -118,7 +119,6 @@ export const router = createBrowserRouter([
         element: <Allusers />,
       },
       {
-
         path: "allwithdrawals",
         element: <AllWithdrawal />,
       },
@@ -126,7 +126,10 @@ export const router = createBrowserRouter([
         path: "alltransactions",
         element: <AllTransactions />,
       },
-
+      {
+        path: "userdetails/:_id",
+        element: <UserDetails />,
+      },
     ],
   },
 ]);
