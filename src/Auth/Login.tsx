@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { setAdminToken } from "../Global/AdminSlice";
-import { setToken } from "../Global/UserSlice";
+import { setToken, setUser } from "../Global/UserSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ const Login = () => {
     try {
       const res = await axios.post("/user/login", formData);
       console.log(res);
+
       toast.success("Login Successful");
 
       setTimeout(() => {
@@ -43,6 +44,7 @@ const Login = () => {
           dispatch(setAdminToken(res.data.data.token));
           navigate("/admin/adminhome");
         } else {
+          dispatch(setUser(res.data.data));
           dispatch(setToken(res.data.data.token));
           navigate("/user/overview");
         }

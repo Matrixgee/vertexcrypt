@@ -15,6 +15,8 @@ import "./header.css";
 // import { clearUser } from "../Function/Slice";
 // import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../Global/UserSlice";
 
 interface UserHeaderProps {
   active: boolean;
@@ -28,7 +30,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ active, setActive }) => {
   const [notifications] = useState(0); // Mock notification count
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Mock user data - replace with your actual user selector
@@ -65,7 +67,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ active, setActive }) => {
   };
 
   const handleLogout = () => {
-    // dispatch({ type: "user/clearUser" });
+    dispatch(clearUser());
     navigate("/login");
     console.log("Logout clicked");
   };
