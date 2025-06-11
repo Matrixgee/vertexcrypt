@@ -1,4 +1,3 @@
-
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
@@ -52,6 +51,7 @@ const AdminSlice = createSlice({
       state.alltransactions = [];
       state.users = [];
       state.plans = [];
+      state.oneUser = null;
     },
   },
 });
@@ -67,4 +67,3 @@ export const {
 } = AdminSlice.actions;
 
 export default AdminSlice.reducer;
-

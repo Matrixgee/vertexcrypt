@@ -1,72 +1,84 @@
-import {
-  DollarSign,
-  TrendingUp,
-  Activity,
-  Target,
-  Wallet,
-  ArrowUpRight,
-} from "lucide-react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ArrowUpRight } from "lucide-react";
 import TradinfviewWidgetone from "../components/tradinfviewWidgetone";
+import { useEffect, useState } from "react";
+import axios from "../config/axiosconfig";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { BiLoaderCircle } from "react-icons/bi";
 
 const Overview = () => {
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<any>([]); // Ideally type this with a proper User type
+
   const statsCards = [
     {
-      title: "Account Balance",
-      value: "$0",
-      percentage: "+12.5%",
-      icon: <DollarSign className="w-6 h-6" />,
-      color: "from-green-400 to-green-600",
-      bgColor: "bg-slate-800",
-    },
-    {
-      title: "Total Profit",
-      value: "$0",
-      percentage: "+8.2%",
-      icon: <TrendingUp className="w-6 h-6" />,
-      color: "from-emerald-400 to-emerald-600",
-      bgColor: "bg-slate-800",
-    },
-    // {
-    //   title: 'Total Bonus',
-    //   value: '$50',
-    //   percentage: '+5.1%',
-    //   icon: <Gift className="w-6 h-6" />,
-    //   color: 'from-green-300 to-green-500',
-    //   bgColor: 'bg-slate-800'
-    // },
-    {
-      title: "Investment Plan",
-      value: "0",
+      title: "Total Balance",
+      value: `$${user.accountBalance || "0.00"}`,
+      icon: <ArrowUpRight className="text-green-400 w-6 h-6" />,
+
+      color: "from-green-600/30 to-emerald-400/30",
       status: "Active",
-      icon: <Activity className="w-6 h-6" />,
-      color: "from-green-500 to-emerald-600",
-      bgColor: "bg-slate-800",
     },
     {
-      title: "Active Plan",
-      value: "0",
+      title: "Total Profits",
+      value: `$${user.totalProfit || "0.00"}`,
+      icon: <ArrowUpRight className="text-green-400 w-6 h-6" />,
+
+      color: "from-emerald-600/30 to-green-400/30",
       status: "Running",
-      icon: <Target className="w-6 h-6" />,
-      color: "from-emerald-400 to-green-600",
-      bgColor: "bg-slate-800",
     },
     {
       title: "Total Deposit",
-      value: "$0",
-      percentage: "+22.7%",
-      icon: <Wallet className="w-6 h-6" />,
-      color: "from-green-400 to-green-600",
-      bgColor: "bg-slate-800",
-    },
-    {
-      title: "Withdrawals",
-      value: "$0",
-      status: "Complete",
-      icon: <ArrowUpRight className="w-6 h-6" />,
-      color: "from-slate-400 to-slate-600",
-      bgColor: "bg-slate-800",
+      value: `$${user.totalDeposit || "0.00"}`,
+      icon: <ArrowUpRight className="text-green-400 w-6 h-6" />,
+
+      color: "from-green-500/30 to-green-300/30",
+      status: "Completed",
     },
   ];
+
+  const token = useSelector((state: any) => state.user.token);
+
+  const getOneUser = async () => {
+    const userId = localStorage.getItem("userId");
+
+    if (!userId || !token) {
+      toast.error("Missing user information. Please log in again.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await axios.get(`/user/userprofile/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUser(res.data.data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      toast.error("Failed to fetch user.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getOneUser();
+  }, []);
+
+  if (loading === true) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <div className="text-center">
+          <BiLoaderCircle className="animate-spin mx-auto mb-4" size={40} />
+          <p className="text-gray-600">Please wait</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-white relative">
@@ -84,12 +96,12 @@ const Overview = () => {
       </div>
 
       {/* Scrollable content wrapper */}
-      <div className="relative  overflow-y-auto h-screen">
+      <div className="relative overflow-y-auto h-screen">
         <div className="p-6 pb-20">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">
-              Welcome back, Mike James!
+              Welcome back, {user.firstName} {user.lastName} !
             </h1>
             <p className="text-slate-300 text-lg">
               Here's an overview of your investment portfolio
@@ -109,12 +121,7 @@ const Overview = () => {
                   >
                     {card.icon}
                   </div>
-                  {card.percentage && (
-                    <span className="text-green-400 text-sm font-medium flex items-center bg-green-500/10 px-2 py-1 rounded-lg border border-green-500/20">
-                      <ArrowUpRight className="w-4 h-4 mr-1" />
-                      {card.percentage}
-                    </span>
-                  )}
+
                   {card.status && (
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -157,27 +164,24 @@ const Overview = () => {
         </div>
       </div>
 
+      {/* Custom Scrollbar Styling */}
       <style>{`
-          /* Custom scrollbar styling */
-          .overflow-y-auto::-webkit-scrollbar {
-            width: 6px;
-          }
-
-          .overflow-y-auto::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.3);
-            border-radius: 3px;
-          }
-
-          .overflow-y-auto::-webkit-scrollbar-thumb {
-            background: rgba(34, 197, 94, 0.3);
-            border-radius: 3px;
-            border: 1px solid rgba(34, 197, 94, 0.1);
-          }
-
-          .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-            background: rgba(34, 197, 94, 0.5);
-          }
-        `}</style>
+        .overflow-y-auto::-webkit-scrollbar {
+          width: 6px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-track {
+          background: rgba(15, 23, 42, 0.3);
+          border-radius: 3px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+          background: rgba(34, 197, 94, 0.3);
+          border-radius: 3px;
+          border: 1px solid rgba(34, 197, 94, 0.1);
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+          background: rgba(34, 197, 94, 0.5);
+        }
+      `}</style>
     </div>
   );
 };
