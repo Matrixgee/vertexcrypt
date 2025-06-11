@@ -1,6 +1,10 @@
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Eye, MoreVertical, Download, Search, RefreshCw } from "lucide-react";
+import toast from "react-hot-toast";
+import axios from "../config/axiosconfig";
+import { useSelector, useDispatch } from "react-redux";
+import { BiLoaderCircle } from "react-icons/bi";
 
 interface Transaction {
   _id: string;
@@ -14,68 +18,11 @@ interface Transaction {
   description?: string;
 }
 
-const mockTransactions: Transaction[] = [
-  {
-    _id: "tx123abc1",
-    mode: "Bank Transfer",
-    firstName: "Alice",
-    lastName: "Johnson",
-    amount: 1500.5,
-    status: "pending",
-    createdAt: "2025-06-01T10:00:00Z",
-    image:
-      "https://via.placeholder.com/600x400/4f46e5/ffffff?text=Payment+Receipt",
-    description: "Monthly subscription payment",
-  },
-  {
-    _id: "tx123abc2",
-    mode: "Crypto",
-    firstName: "Bob",
-    lastName: "Smith",
-    amount: 2000.0,
-    status: "approved",
-    createdAt: "2025-06-02T11:00:00Z",
-    image:
-      "https://via.placeholder.com/600x400/059669/ffffff?text=Crypto+Receipt",
-    description: "Bitcoin payment for services",
-  },
-  {
-    _id: "tx123abc3",
-    mode: "PayPal",
-    firstName: "Carol",
-    lastName: "Davis",
-    amount: 300.25,
-    status: "rejected",
-    createdAt: "2025-06-03T12:00:00Z",
-    image:
-      "https://via.placeholder.com/600x400/dc2626/ffffff?text=PayPal+Receipt",
-    description: "Refund request",
-  },
-  {
-    _id: "tx123abc4",
-    mode: "Credit Card",
-    firstName: "David",
-    lastName: "Wilson",
-    amount: 750.0,
-    status: "pending",
-    createdAt: "2025-06-04T14:30:00Z",
-    image:
-      "https://via.placeholder.com/600x400/7c3aed/ffffff?text=Card+Receipt",
-    description: "Product purchase",
-  },
-  {
-    _id: "tx123abc5",
-    mode: "Wire Transfer",
-    firstName: "Emma",
-    lastName: "Brown",
-    amount: 5000.0,
-    status: "approved",
-    createdAt: "2025-06-05T09:15:00Z",
-    image:
-      "https://via.placeholder.com/600x400/ea580c/ffffff?text=Wire+Receipt",
-    description: "Large transaction approval",
-  },
-];
+// You'll need to import or define this action
+const adminTransactionView = (data: Transaction[]) => ({
+  type: "ADMIN_TRANSACTION_VIEW",
+  payload: data,
+});
 
 const AllTransactions: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -88,7 +35,10 @@ const AllTransactions: React.FC = () => {
     action: "confirm" | "decline" | null;
     transactionId: string;
   }>({ open: false, action: null, transactionId: "" });
-  const [loading, setLoading] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"date" | "amount" | "name">("date");
@@ -100,27 +50,148 @@ const AllTransactions: React.FC = () => {
   }>({ show: false, message: "", type: "success" });
 
   const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const userToken = useSelector((state: any) => state.admin.token);
+
+  // Get transactions from Redux store if available
+  const reduxTransactions = useSelector(
+    (state: any) => state.admin.transactions || []
+  );
+
+  const getAllTransactions = async () => {
+    const url = "/admin/allTransactions";
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
+
+      const transactionData = response.data.data || response.data;
+      setTransactions(transactionData);
+      dispatch(adminTransactionView(transactionData));
+      setLoading(false);
+    } catch (error: any) {
+      console.error("Error fetching transactions:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to fetch transactions. Please try again.";
+      setError(errorMessage);
+      setLoading(false);
+      toast.error(errorMessage);
+    }
+  };
 
   useEffect(() => {
-    setTransactions(mockTransactions);
-  }, []);
+    if (userToken) {
+      getAllTransactions();
+    } else {
+      setError("No authentication token found");
+      setLoading(false);
+    }
+  }, [userToken]);
+
+  // Update local state when Redux state changes
+  useEffect(() => {
+    if (reduxTransactions.length > 0) {
+      setTransactions(reduxTransactions);
+    }
+  }, [reduxTransactions]);
+
+  const confirmDeposit = async (transactionId: string) => {
+    const confirmUrl = `/admin/approveDeposit/${transactionId}`;
+    setLoading(true);
+
+    try {
+      await axios.put(
+        confirmUrl,
+        {},
+        {
+          headers: { Authorization: `Bearer ${userToken}` },
+        }
+      );
+
+      // Update local state immediately for better UX
+      setTransactions((prev) =>
+        prev.map((tx) =>
+          tx._id === transactionId ? { ...tx, status: "approved" as const } : tx
+        )
+      );
+
+      // Refresh the transactions list
+      await getAllTransactions();
+      toast.success("Deposit confirmed successfully");
+      setLoading(false);
+    } catch (error: any) {
+      console.error("Error confirming deposit:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to confirm deposit. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      setLoading(false);
+    }
+  };
+
+  const handleDecline = async (transactionId: string) => {
+    const declineUrl = `/admin/declineDeposit/${transactionId}`;
+    setLoading(true);
+
+    try {
+      await axios.put(
+        declineUrl,
+        {},
+        {
+          headers: { Authorization: `Bearer ${userToken}` },
+        }
+      );
+
+      // Update local state immediately for better UX
+      setTransactions((prev) =>
+        prev.map((tx) =>
+          tx._id === transactionId ? { ...tx, status: "rejected" as const } : tx
+        )
+      );
+
+      // Refresh the transactions list
+      await getAllTransactions();
+      toast.success("Deposit declined successfully");
+      setLoading(false);
+    } catch (error: any) {
+      console.error("Error declining deposit:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to decline deposit. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      setLoading(false);
+    }
+  };
 
   // Filter and sort transactions
   useEffect(() => {
-    const filtered = transactions.filter((tx) => {
-      const matchesSearch =
-        searchTerm === "" ||
-        tx.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tx._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tx.mode.toLowerCase().includes(searchTerm.toLowerCase());
+    let filtered = [...transactions];
 
-      const matchesStatus =
-        statusFilter === "all" || tx.status === statusFilter;
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter((tx) => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          tx.firstName.toLowerCase().includes(searchLower) ||
+          (tx.lastName && tx.lastName.toLowerCase().includes(searchLower)) ||
+          tx._id.toLowerCase().includes(searchLower) ||
+          tx.mode.toLowerCase().includes(searchLower) ||
+          (tx.description && tx.description.toLowerCase().includes(searchLower))
+        );
+      });
+    }
 
-      return matchesSearch && matchesStatus;
-    });
+    // Apply status filter
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((tx) => tx.status === statusFilter);
+    }
 
-    // Sort transactions
+    // Apply sorting
     filtered.sort((a, b) => {
       let comparison = 0;
 
@@ -167,7 +238,11 @@ const AllTransactions: React.FC = () => {
   };
 
   const openProofOfPayment = (url: string) => {
-    window.open(url, "_blank");
+    if (url) {
+      window.open(url, "_blank");
+    } else {
+      toast.error("No proof of payment available");
+    }
   };
 
   const toggleMenu = (transactionId: string) => {
@@ -185,48 +260,47 @@ const AllTransactions: React.FC = () => {
   const handleConfirmAction = async () => {
     if (!confirmModal.action || !confirmModal.transactionId) return;
 
-    setLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      const newStatus =
-        confirmModal.action === "confirm" ? "approved" : "rejected";
-      const actionText =
-        confirmModal.action === "confirm" ? "confirmed" : "declined";
-
-      setTransactions((prev) =>
-        prev.map((tx) =>
-          tx._id === confirmModal.transactionId
-            ? { ...tx, status: newStatus as Transaction["status"] }
-            : tx
-        )
-      );
-
-      showNotification(`Payment ${actionText} successfully!`, "success");
-      setLoading(false);
+    try {
+      if (confirmModal.action === "confirm") {
+        await confirmDeposit(confirmModal.transactionId);
+      } else {
+        await handleDecline(confirmModal.transactionId);
+      }
+    } catch (error) {
+      console.log(error);
+      // Error handling is done in the individual functions
+    } finally {
       setConfirmModal({ open: false, action: null, transactionId: "" });
-    }, 1000);
+    }
   };
 
   const exportTransactions = () => {
+    if (filteredTransactions.length === 0) {
+      toast.error("No transactions to export");
+      return;
+    }
+
     const csvContent =
       "data:text/csv;charset=utf-8," +
       "Reference,Mode,User,Amount,Status,Date,Description\n" +
       filteredTransactions
         .map(
           (tx) =>
-            `${tx._id},${tx.mode},"${tx.firstName} ${tx.lastName || ""}",${
+            `${tx._id},"${tx.mode}","${tx.firstName} ${tx.lastName || ""}",${
               tx.amount
-            },${tx.status},${new Date(tx.createdAt).toLocaleDateString()},"${
-              tx.description || ""
-            }"`
+            },"${tx.status}","${new Date(
+              tx.createdAt
+            ).toLocaleDateString()}","${tx.description || ""}"`
         )
         .join("\n");
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "transactions.csv");
+    link.setAttribute(
+      "download",
+      `transactions_${new Date().toISOString().split("T")[0]}.csv`
+    );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -254,6 +328,43 @@ const AllTransactions: React.FC = () => {
     }).format(amount);
   };
 
+  const refreshTransactions = () => {
+    getAllTransactions();
+  };
+
+  if (loading && transactions.length === 0) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <div className="text-center">
+          <BiLoaderCircle className="animate-spin mx-auto mb-4" size={40} />
+          <p className="text-gray-600">Loading transactions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && transactions.length === 0) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">
+            <RefreshCw size={40} className="mx-auto" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Error Loading Transactions
+          </h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={refreshTransactions}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-screen bg-green-200 p-6 overflow-y-auto">
       {/* Notification */}
@@ -271,13 +382,23 @@ const AllTransactions: React.FC = () => {
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Transactions
-          </h1>
-          <p className="text-gray-600">
-            Manage and review all payment transactions
-          </p>
+        <div className="mb-6 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Transactions
+            </h1>
+            <p className="text-gray-600">
+              Manage and review all payment transactions
+            </p>
+          </div>
+          <button
+            onClick={refreshTransactions}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+            Refresh
+          </button>
         </div>
 
         {/* Controls */}
@@ -330,7 +451,8 @@ const AllTransactions: React.FC = () => {
             {/* Export Button */}
             <button
               onClick={exportTransactions}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              disabled={filteredTransactions.length === 0}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="w-4 h-4" />
               Export CSV
@@ -370,7 +492,9 @@ const AllTransactions: React.FC = () => {
             <h3 className="text-sm font-medium text-gray-500">Total Value</h3>
             <p className="text-2xl font-bold text-gray-800">
               {formatCurrency(
-                filteredTransactions.reduce((sum, tx) => sum + tx.amount, 0)
+                filteredTransactions
+                  .filter((tx) => tx.status === "approved")
+                  .reduce((sum, tx) => sum + tx.amount, 0)
               )}
             </p>
           </div>
@@ -378,7 +502,7 @@ const AllTransactions: React.FC = () => {
 
         {/* Table */}
         {filteredTransactions.length > 0 ? (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="bg-red-400 rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
@@ -528,9 +652,22 @@ const AllTransactions: React.FC = () => {
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 No transactions found
               </h3>
-              <p className="text-gray-500">
-                Try adjusting your search or filter criteria.
+              <p className="text-gray-500 mb-4">
+                {searchTerm || statusFilter !== "all"
+                  ? "Try adjusting your search or filter criteria."
+                  : "No transactions available at the moment."}
               </p>
+              {(searchTerm || statusFilter !== "all") && (
+                <button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setStatusFilter("all");
+                  }}
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  Clear filters
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -568,12 +705,15 @@ const AllTransactions: React.FC = () => {
                 <button
                   onClick={handleConfirmAction}
                   disabled={loading}
-                  className={`px-4 py-2 text-white rounded-lg transition-colors disabled:opacity-50 ${
+                  className={`px-4 py-2 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2 ${
                     confirmModal.action === "confirm"
                       ? "bg-green-600 hover:bg-green-700"
                       : "bg-red-600 hover:bg-red-700"
                   }`}
                 >
+                  {loading && (
+                    <BiLoaderCircle className="animate-spin w-4 h-4" />
+                  )}
                   {loading
                     ? "Processing..."
                     : confirmModal.action === "confirm"
@@ -587,7 +727,6 @@ const AllTransactions: React.FC = () => {
       )}
     </div>
   );
-
 };
 
 export default AllTransactions;

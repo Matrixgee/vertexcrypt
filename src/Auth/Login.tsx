@@ -5,6 +5,9 @@ import axios from "../config/axiosconfig";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
+import { useDispatch } from "react-redux";
+import { setAdminToken } from "../Global/AdminSlice";
+import { setToken } from "../Global/UserSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,6 +17,8 @@ const Login = () => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,10 +37,13 @@ const Login = () => {
       const res = await axios.post("/user/login", formData);
       console.log(res);
       toast.success("Login Successful");
+
       setTimeout(() => {
         if (res.data.data.isAdmin) {
-          navigate("/welcome/admin");
+          dispatch(setAdminToken(res.data.data.token));
+          navigate("/admin/adminhome");
         } else {
+          dispatch(setToken(res.data.data.token));
           navigate("/user/overview");
         }
       }, 3000);

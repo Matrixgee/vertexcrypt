@@ -4,10 +4,12 @@ import {
   FiMessageCircle,
   FiArrowLeft,
 } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const Review = () => {
+  const navigate = useNavigate();
   const handleBackToLogin = () => {
-    // Add your navigation logic here
+    navigate("/login");
     console.log("Navigate back to login");
   };
 

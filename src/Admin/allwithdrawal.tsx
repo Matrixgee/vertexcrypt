@@ -1,57 +1,88 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { toast } from "react-hot-toast";
+import axios from "../config/axiosconfig";
+import { useSelector } from "react-redux";
 
-const mockWithdrawals = [
-  {
-    _id: "wd123456",
-    userId: { userName: "johndoe" },
-    amount: 500,
-    mode: "Bank Transfer",
-    status: "pending",
-    date: "2025-06-01",
-  },
-  {
-    _id: "wd123457",
-    userId: { userName: "janedoe" },
-    amount: 300,
-    mode: "Crypto",
-    status: "processing",
-    date: "2025-06-03",
-  },
-  {
-    _id: "wd123458",
-    userId: { userName: "richinvestor" },
-    amount: 1200,
-    mode: "PayPal",
-    status: "approved",
-    date: "2025-06-05",
-  },
-];
-
-
+// Status color mapping
 const statusColors = {
-  pending: "bg-yellow-100 text-yellow-700",
-  processing: "bg-blue-100 text-blue-700",
   approved: "bg-green-100 text-green-700",
+  processing: "bg-blue-100 text-blue-700",
   rejected: "bg-red-100 text-red-700",
+  pending: "bg-yellow-100 text-yellow-700",
 };
 
+type Withdrawal = {
+  _id: string;
+  userId?: {
+    userName?: string;
+  };
+  amount: number;
+  mode: string;
+  status: string;
+  date: string;
+};
 
 const AllWithdrawal = () => {
-  const [withdrawals, setWithdrawals] = useState(mockWithdrawals);
+  const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
+  const userToken = useSelector((state: any) => state.admin.token);
 
-  const updateStatus = (_id: string, newStatus: string) => {
-    setWithdrawals((prev) =>
-      prev.map((item) =>
-        item._id === _id ? { ...item, status: newStatus } : item
-      )
+  // Fetch all withdrawals
+  const fetchWithdrawals = async () => {
+    try {
+      const response = await axios.get("/admin/getWithdrawals", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      setWithdrawals(response.data.data);
+    } catch (error) {
+      console.log(error);
+
+      toast.error("Failed to fetch withdrawals.");
+    }
+  };
+
+  useEffect(() => {
+    fetchWithdrawals();
+  }, []);
+
+  // Unified status update function
+  const updateStatus = async (_id: string, status: string) => {
+    const toastId = toast.loading(
+      `${status[0].toUpperCase() + status.slice(1)}...`
     );
-    toast.success(`Withdrawal marked as ${newStatus}`);
+
+    // API endpoint mapping
+    const endpoints: any = {
+      approved: `/admin/approveWithdrawal/${_id}`,
+      rejected: `/admin/declineWithdrawal/${_id}`,
+      processing: `/admin/pendingWithdrawal/${_id}`,
+    };
+
+    try {
+      const response = await axios.put(
+        endpoints[status],
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      toast.dismiss(toastId);
+      toast.success(response.data.message || `Marked as ${status}`);
+      fetchWithdrawals();
+    } catch (error: any) {
+      toast.dismiss(toastId);
+      toast.error(
+        error.response?.data?.error || `Failed to mark as ${status}.`
+      );
+    }
   };
 
   return (
-
     <div className="h-full w-full p-6 bg-green-50">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">
         Manage Client Withdrawals
@@ -79,25 +110,27 @@ const AllWithdrawal = () => {
                 <td className="px-4 py-3 font-mono text-gray-700">
                   {withdrawal._id.slice(0, 6)}
                 </td>
-                <td className="px-4 py-3">{withdrawal.userId?.userName}</td>
+                <td className="px-4 py-3">
+                  {withdrawal.userId?.userName || "N/A"}
+                </td>
                 <td className="px-4 py-3 font-semibold text-gray-800">
                   ${withdrawal.amount}
                 </td>
-                <td className="px-4 py-3">{withdrawal.mode}</td>
+                <td className="px-4 py-3 capitalize">{withdrawal.mode}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
                       statusColors[
                         withdrawal.status as keyof typeof statusColors
-                      ]
-
+                      ] || "bg-gray-100 text-gray-700"
                     }`}
                   >
                     {withdrawal.status}
                   </span>
                 </td>
-
-                <td className="px-4 py-3">{withdrawal.date}</td>
+                <td className="px-4 py-3">
+                  {new Date(withdrawal.date).toLocaleDateString()}
+                </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap items-center gap-2">
                     <button
@@ -122,7 +155,6 @@ const AllWithdrawal = () => {
                       <FaEye className="w-4 h-4" />
                     </button>
                   </div>
-
                 </td>
               </tr>
             ))}

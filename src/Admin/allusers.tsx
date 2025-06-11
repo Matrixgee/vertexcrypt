@@ -1,45 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Search, User, Eye, Check, X, MoreHorizontal } from "lucide-react";
+import axios from "../config/axiosconfig";
+import { Search, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { isAxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import { setAllUsers } from "../Global/AdminSlice";
+
+type UserType = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: string;
+  createdAt: string;
+  accountBalance: number;
+};
 
 const Allusers = () => {
-  const users = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      status: "Active",
-      joinDate: "2024-01-15",
-      balance: "$1,250.00",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      status: "Pending",
-      joinDate: "2024-02-20",
-      balance: "$850.00",
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      email: "mike@example.com",
-      status: "Suspended",
-      joinDate: "2024-01-10",
-      balance: "$2,100.00",
-    },
-    {
-      id: 4,
-      name: "Sarah Wilson",
-      email: "sarah@example.com",
-      status: "Active",
-      joinDate: "2024-03-05",
-      balance: "$750.00",
-    },
-  ];
+  const [users, setusers] = useState<UserType[]>([]);
+
+  const token = useSelector((state: any) => state.admin.token);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Active":
+      case "Approved":
         return "bg-green-100 text-green-800";
       case "Pending":
         return "bg-yellow-100 text-yellow-800";
@@ -50,9 +36,41 @@ const Allusers = () => {
     }
   };
 
-  const handleAction = (action: string, user: any, type: string) => {
-    console.log(`Action: ${action}, User: ${user.name}, Type: ${type}`);
+  const dispatch = useDispatch();
+
+  const getAllusers = async () => {
+    const toastloadingId = toast.loading("loading users...");
+    try {
+      const res = await axios.get("/admin/getAllUser", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setusers(res.data.data);
+      dispatch(setAllUsers(res.data.data));
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        const errorMsg =
+          error.response?.data?.message || "An unexpected error occurred";
+        toast.error(errorMsg);
+      } else {
+        toast.error("Error occurred");
+      }
+    } finally {
+      toast.dismiss(toastloadingId);
+    }
   };
+
+  const navigate = useNavigate();
+
+  const handleManage = (_id: string) => {
+    navigate(`/admin/userdetails/${_id}`);
+  };
+
+  useEffect(() => {
+    getAllusers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className=" h-screen flex flex-col p-6">
@@ -93,7 +111,7 @@ const Allusers = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
+              <tr key={user._id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
@@ -103,7 +121,7 @@ const Allusers = () => {
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">
-                        {user.name}
+                        {`${user.firstName} ${user.lastName}`}
                       </div>
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </div>
@@ -112,42 +130,24 @@ const Allusers = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
                     className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
-                      user.status
+                      user.status.charAt(0).toUpperCase() + user.status.slice(1)
                     )}`}
                   >
-                    {user.status}
+                    {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {user.joinDate}
+                  {new Date(user.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {user.balance}
+                  ${user.accountBalance}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                   <button
-                    onClick={() => handleAction("view", user, "user")}
-                    className="text-blue-600 hover:text-blue-900"
+                    onClick={() => handleManage(user._id)}
+                    className="px-3 py-2 bg-green-400 rounded-md font-semibold"
                   >
-                    <Eye className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleAction("approve", user, "user")}
-                    className="text-green-600 hover:text-green-900"
-                  >
-                    <Check className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleAction("suspend", user, "user")}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleAction("more", user, "user")}
-                    className="text-gray-600 hover:text-gray-900"
-                  >
-                    <MoreHorizontal className="h-4 w-4" />
+                    Manage
                   </button>
                 </td>
               </tr>
