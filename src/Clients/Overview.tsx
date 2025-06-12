@@ -43,11 +43,6 @@ const Overview = () => {
   const getOneUser = async () => {
     const userId = localStorage.getItem("userId");
 
-    if (!userId || !token) {
-      toast.error("Missing user information. Please log in again.");
-      return;
-    }
-
     try {
       setLoading(true);
       const res = await axios.get(`/user/userprofile/${userId}`, {

@@ -37,6 +37,8 @@ const Login = () => {
       const res = await axios.post("/user/login", formData);
       console.log(res);
 
+      const userId = res.data.data._id;
+
       toast.success("Login Successful");
 
       setTimeout(() => {
@@ -46,6 +48,7 @@ const Login = () => {
         } else {
           dispatch(setUser(res.data.data));
           dispatch(setToken(res.data.data.token));
+          localStorage.setItem("userId", userId);
           navigate("/user/overview");
         }
       }, 3000);
