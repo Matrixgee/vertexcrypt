@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -22,7 +21,6 @@ const initialState: UserState = {
   Image: "",
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 const UserSlice = createSlice({
   name: "user",
   initialState,
@@ -73,4 +71,3 @@ export const {
 } = UserSlice.actions;
 
 export default UserSlice.reducer;
-

@@ -47,7 +47,7 @@ const Login = () => {
           navigate("/admin/adminhome");
         } else {
           dispatch(setUser(res.data.data));
-          dispatch(setToken(res.data.data.token));
+          dispatch(setToken(res.data.token));
           localStorage.setItem("userId", userId);
           navigate("/user/overview");
         }

@@ -38,7 +38,8 @@ const Overview = () => {
     },
   ];
 
-  const token = useSelector((state: any) => state.user.token);
+  const token = useSelector((state: any) => state.user.Token);
+  console.log(token);
 
   const getOneUser = async () => {
     const userId = localStorage.getItem("userId");
