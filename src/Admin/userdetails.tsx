@@ -7,8 +7,8 @@ import { setOneUser } from "../Global/AdminSlice";
 import CreditDebitModal from "../components/AllModals/creditdebitmodal";
 import ConfirmSuspendModal from "../components/AllModals/confirmsuspendmodal";
 import ConfirmUnsuspendModal from "../components/AllModals/confirmunsuspendmodal";
-// import ConfirmDeleteModal from "../components/AllModals/confirmdeletemodal";
-// import ConfirmClearAcct from "../components/AllModals/confirmclearacct";
+import ConfirmDeleteModal from "../components/AllModals/ConfirmDeleteModal";
+import ConfirmClearAcct from "../components/AllModals/ConfirmClearAcct";
 import toast from "react-hot-toast";
 
 interface UserData {
@@ -45,8 +45,8 @@ const UserDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
   const [isUnsuspendModalOpen, setIsUnsuspendModalOpen] = useState(false);
-  // const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  // const [isClearModalOpen, setIsClearModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isClearModalOpen, setIsClearModalOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userToken = useSelector((state: RootState) => state.admin.token);
@@ -107,38 +107,38 @@ const UserDetails = () => {
     }
   };
 
-  // const deleteUser = async () => {
-  //   const toastloadinId = toast.loading("Please wait...");
-  //   const deleteUrl = `/admin/deleteOneUser/${_id}`;
-  //   const headers = {
-  //     Authorization: `Bearer ${userToken}`,
-  //   };
+  const deleteUser = async () => {
+    const toastloadinId = toast.loading("Please wait...");
+    const deleteUrl = `/admin/deleteOneUser/${_id}`;
+    const headers = {
+      Authorization: `Bearer ${userToken}`,
+    };
 
-  //   try {
-  //     await axios.delete(deleteUrl, { headers });
-  //     navigate(-1); // Navigate back to the previous page after deletion
-  //     console.log("User deleted successfully");
-  //   } catch (error) {
-  //     console.error("Error deleting user:", error);
-  //   } finally {
-  //     toast.dismiss(toastloadinId);
-  //   }
-  // };
+    try {
+      await axios.delete(deleteUrl, { headers });
+      navigate(-1); // Navigate back to the previous page after deletion
+      console.log("User deleted successfully");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    } finally {
+      toast.dismiss(toastloadinId);
+    }
+  };
 
-  // const clearAcct = async () => {
-  //   const toastloadinId = toast.loading("Please wait...");
-  //   try {
-  //     const response = await axios.delete(`/admin/clearAccount/${_id}`, {
-  //       headers: { Authorization: `Bearer ${userToken}` },
-  //     });
-  //     dispatch(setOneUser(response.data));
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     toast.dismiss(toastloadinId);
-  //   }
-  // };
+  const clearAcct = async () => {
+    const toastloadinId = toast.loading("Please wait...");
+    try {
+      const response = await axios.delete(`/admin/clearAccount/${_id}`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
+      dispatch(setOneUser(response.data));
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      toast.dismiss(toastloadinId);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -187,18 +187,18 @@ const UserDetails = () => {
   };
 
   const openDeleteModal = () => {
-    // setIsDeleteModalOpen(true);
+    setIsDeleteModalOpen(true);
   };
 
-  // const closeDeleteModal = () => {
-  //   setIsDeleteModalOpen(false);
-  // };
-  const OpenClearModal = () => {
-    // setIsClearModalOpen(true);
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
   };
-  // const closeClearModal = () => {
-  //   setIsClearModalOpen(false);
-  // };
+  const OpenClearModal = () => {
+    setIsClearModalOpen(true);
+  };
+  const closeClearModal = () => {
+    setIsClearModalOpen(false);
+  };
 
   if (!oneUser) {
     return <div>Loading...</div>; // Placeholder for loading state
@@ -411,16 +411,16 @@ const UserDetails = () => {
         onClose={closeUnsuspendModal}
         onConfirm={unsuspendUser}
       />
-      {/* <ConfirmDeleteModal
+      <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteModal}
         onConfirm={deleteUser}
-      /> */}
-      {/* <ConfirmClearAcct
+      />
+      <ConfirmClearAcct
         isOpen={isClearModalOpen}
         onClose={closeClearModal}
         onConfirm={clearAcct}
-      /> */}
+      />
     </div>
   );
 };

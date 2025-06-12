@@ -28,8 +28,8 @@ type CryptoMethod = "btc" | "eth" | "usdt";
 
 const Deposit = () => {
   const cryptoAddresses: Record<CryptoMethod, string> = {
-    btc: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
-    eth: "0x742d35Cc6634C0532925a3b8D429d3e61d8ed1a4",
+    btc: "bc1qsay5uvf0j2adnuww8xfepdytkth77v0k90kwu0",
+    eth: "0xD66fF48613396F6477A5AD03Af1b3A343274a410",
     usdt: "TPYuqJ8RzFv3qXJVGbhQ8YzyJW6xSoNmqZ",
   };
 

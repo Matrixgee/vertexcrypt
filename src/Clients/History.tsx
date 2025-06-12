@@ -1,55 +1,86 @@
-
-import { 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
   ArrowDownLeft,
   ArrowUpRight,
   TrendingUp,
   CheckCircle,
   Download,
-} from 'lucide-react';
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "../config/axiosconfig";
+
+interface Transaction {
+  _id: string;
+  amount: string;
+  mode: string;
+  status: string;
+  createdAt: string;
+  transationType: string;
+  description: string;
+  type: string;
+  date: string;
+  time: string;
+}
 
 const History = () => {
-  const transactions = [
-    {
-      type: 'deposit',
-      amount: '$5,000',
-      date: '2025-06-03',
-      time: '14:30',
-      status: 'completed',
-      description: 'Investment Deposit - Premium Plan'
-    },
-    {
-      type: 'profit',
-      amount: '+$125',
-      date: '2025-06-02',
-      time: '09:15',
-      status: 'completed',
-      description: 'Daily Profit - Starter Plan'
-    },
-    {
-      type: 'withdrawal',
-      amount: '-$1,250',
-      date: '2025-06-01',
-      time: '16:45',
-      status: 'completed',
-      description: 'Withdrawal to Bank Account'
-    },
-    {
-      type: 'deposit',
-      amount: '$10,000',
-      date: '2025-05-28',
-      time: '11:20',
-      status: 'completed',
-      description: 'Investment Deposit - VIP Plan'
-    },
-    {
-      type: 'profit',
-      amount: '+$350',
-      date: '2025-05-27',
-      time: '08:30',
-      status: 'completed',
-      description: 'Weekly Profit - VIP Plan'
-    }
-  ];
+  const [transactions, settransactions] = useState<Transaction[]>([]);
+
+  const userToken = useSelector((state: any) => state.user.Token);
+  useEffect(() => {
+    const getHistory = async () => {
+      try {
+        const response = await axios.get("/user/history", {
+          headers: { Authorization: `Bearer ${userToken}` },
+        });
+
+        const rawData = response.data.data;
+
+        if (Array.isArray(rawData)) {
+          const mapped = rawData.map((tx: any) => {
+            const createdAt = new Date(tx.createdAt);
+            const date = createdAt.toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            });
+            const time = createdAt.toLocaleTimeString(undefined, {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            return {
+              _id: tx._id,
+              amount: `$${tx.amount.toFixed(2)}`,
+              mode: tx.mode,
+
+              createdAt: tx.createdAt,
+              status: tx.status.toUpperCase(),
+              type:
+                tx.status.toLowerCase() === "approved"
+                  ? "deposit"
+                  : tx.status.toLowerCase() === "failed"
+                  ? "withdrawal"
+                  : "pending",
+
+              transationType: tx.mode,
+              description: `Crypto deposit via ${tx.mode.toUpperCase()}`,
+              date,
+              time,
+            };
+          });
+
+          settransactions(mapped);
+        } else {
+          console.error("Unexpected data format:", rawData);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (userToken) getHistory();
+  }, [userToken]);
 
   return (
     <div className="min-h-screen text-white relative">
@@ -71,10 +102,14 @@ const History = () => {
         <div className="p-6 pb-20">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">Transaction History</h1>
-            <p className="text-slate-300 text-lg">View all your account transactions</p>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Transaction History
+            </h1>
+            <p className="text-slate-300 text-lg">
+              View all your account transactions
+            </p>
           </div>
-          
+
           <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl overflow-hidden hover:border-green-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10">
             <div className="p-6 border-b border-green-500/20">
               <div className="flex items-center justify-between">
@@ -88,45 +123,82 @@ const History = () => {
                 </button>
               </div>
             </div>
-            
+
             <div className="divide-y divide-green-500/10">
-              {transactions.map((transaction, index) => (
-                <div key={index} className="p-6 hover:bg-slate-800/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-green-500/5">
+              {transactions.map((transaction: Transaction, index: number) => (
+                <div
+                  key={index}
+                  className="p-6 hover:bg-slate-800/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-green-500/5"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className={`p-3 rounded-xl shadow-lg ${
-                        transaction.type === 'deposit' ? 'bg-gradient-to-br from-green-400 to-green-600' :
-                        transaction.type === 'profit' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
-                        'bg-gradient-to-br from-blue-400 to-blue-600'
-                      }`}>
-                        {transaction.type === 'deposit' ? (
+                      <div
+                        className={`p-3 rounded-xl shadow-lg ${
+                          transaction.type === "deposit"
+                            ? "bg-gradient-to-br from-green-400 to-green-600"
+                            : transaction.type === "profit"
+                            ? "bg-gradient-to-br from-emerald-400 to-emerald-600"
+                            : "bg-gradient-to-br from-blue-400 to-blue-600"
+                        }`}
+                      >
+                        {transaction.type === "deposit" ? (
                           <ArrowUpRight className="w-5 h-5 text-white" />
-                        ) : transaction.type === 'profit' ? (
+                        ) : transaction.type === "profit" ? (
                           <TrendingUp className="w-5 h-5 text-white" />
                         ) : (
                           <ArrowDownLeft className="w-5 h-5 text-white" />
                         )}
                       </div>
-                      
+
                       <div>
-                        <p className="font-semibold text-white">{transaction.description}</p>
-                        <p className="text-sm text-slate-400">{transaction.date} at {transaction.time}</p>
+                        <p className="font-semibold text-white">
+                          {transaction.description}
+                        </p>
+                        <p className="text-sm text-slate-400">
+                          {transaction.date} at {transaction.time}
+                        </p>
                       </div>
                     </div>
-                    
+
                     <div className="text-right">
-                      <p className={`font-semibold text-lg ${
-                        transaction.type === 'profit' ? 'text-green-400' :
-                        transaction.type === 'withdrawal' ? 'text-red-400' :
-                        'text-white'
-                      }`}>
+                      <p
+                        className={`font-semibold text-lg ${
+                          transaction.type === "profit"
+                            ? "text-green-400"
+                            : transaction.type === "withdrawal"
+                            ? "text-red-400"
+                            : "text-white"
+                        }`}
+                      >
                         {transaction.amount}
                       </p>
                       <div className="flex items-center justify-end space-x-1">
-                        <CheckCircle className="w-4 h-4 text-green-400" />
-                        <span className="text-sm text-green-400 bg-green-500/10 px-2 py-1 rounded-lg border border-green-500/20">
-                          {transaction.status}
-                        </span>
+                        {transaction.status.toLowerCase() === "approved" && (
+                          <>
+                            <CheckCircle className="w-4 h-4 text-green-400" />
+                            <span className="text-sm uppercase text-green-400 bg-green-500/10 px-2 py-1 rounded-lg border border-green-500/20">
+                              {transaction.status}
+                            </span>
+                          </>
+                        )}
+
+                        {transaction.status.toLowerCase() === "pending" && (
+                          <>
+                            <ArrowUpRight className="w-4 h-4 text-yellow-400" />
+                            <span className="text-sm uppercase text-yellow-400 bg-yellow-500/10 px-2 py-1 rounded-lg border border-yellow-500/20">
+                              {transaction.status}
+                            </span>
+                          </>
+                        )}
+
+                        {transaction.status.toLowerCase() === "failed" && (
+                          <>
+                            <ArrowDownLeft className="w-4 h-4 text-red-400" />
+                            <span className="text-sm uppercase text-red-400 bg-red-500/10 px-2 py-1 rounded-lg border border-red-500/20">
+                              {transaction.status}
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
