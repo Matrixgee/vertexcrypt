@@ -24,16 +24,16 @@ import axios from "../config/axiosconfig";
 import { setDeposit } from "../Global/UserSlice";
 import { AxiosError } from "axios";
 
-type CryptoMethod = "bitcoin" | "ethereum" | "usdt";
+type CryptoMethod = "btc" | "eth" | "usdt";
 
 const Deposit = () => {
   const cryptoAddresses: Record<CryptoMethod, string> = {
-    bitcoin: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
-    ethereum: "0x742d35Cc6634C0532925a3b8D429d3e61d8ed1a4",
+    btc: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+    eth: "0x742d35Cc6634C0532925a3b8D429d3e61d8ed1a4",
     usdt: "TPYuqJ8RzFv3qXJVGbhQ8YzyJW6xSoNmqZ",
   };
 
-  const [selectedMethod, setSelectedMethod] = useState<CryptoMethod>("bitcoin");
+  const [selectedMethod, setSelectedMethod] = useState<CryptoMethod>("btc");
   const [amount, setAmount] = useState("");
   const [copied, setCopied] = useState(false);
   const [showProof, setShowProof] = useState(false);
@@ -43,12 +43,14 @@ const Deposit = () => {
   const [showPreview, setShowPreview] = useState(false);
 
   const dispatch = useDispatch();
-  const userToken = useSelector((state: any) => state.user.token);
+  const userToken = useSelector((state: any) => state.user.Token);
+
+  console.log(userToken);
 
   const paymentMethods = useMemo(
     () => [
       {
-        id: "bitcoin",
+        id: "btc",
         name: "Bitcoin",
         icon: <Bitcoin className="w-6 h-6" />,
         color: "from-orange-400 to-orange-600",
@@ -58,7 +60,7 @@ const Deposit = () => {
         network: "BTC",
       },
       {
-        id: "ethereum",
+        id: "eth",
         name: "Ethereum",
         icon: <Wallet className="w-6 h-6" />,
         color: "from-blue-400 to-blue-600",
@@ -88,7 +90,7 @@ const Deposit = () => {
 
   const isValidAmount = useMemo(() => {
     const amt = parseFloat(amount);
-    return !isNaN(amt) && amt >= 10;
+    return !isNaN(amt) && amt > 0;
   }, [amount]);
 
   const copyToClipboard = async (text: string) => {
@@ -106,7 +108,7 @@ const Deposit = () => {
 
   const handleProceed = () => {
     if (!isValidAmount) {
-      toast.error("Enter a valid amount (minimum $10)");
+      toast.error("Enter a valid amount");
       return;
     }
     setShowProof(true);
@@ -148,6 +150,8 @@ const Deposit = () => {
     if (fileInput) fileInput.value = "";
   };
 
+  // const nav = useNavigate();
+
   const handleSubmit = async () => {
     if (!proof) {
       toast.error("Please upload proof of payment");
@@ -178,6 +182,8 @@ const Deposit = () => {
       setProof(null);
       setPreviewUrl("");
       setShowProof(false);
+      setSelectedMethod("btc");
+      // nav("/user/overview");
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       toast.error(
@@ -226,8 +232,8 @@ const Deposit = () => {
                 </button>
               )}
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
-                  <Wallet className="w-8 h-8 mr-3 text-green-400" />
+                <h1 className="text-3xl font-bold text-white mb-2 flex items-center max-md:text-xl">
+                  {/* <Wallet className="w-8 h-8 mr-3 text-green-400" /> */}
                   {showProof ? "Upload Proof of Payment" : "Make a Deposit"}
                 </h1>
                 <p className="text-slate-300 text-lg">
@@ -314,7 +320,6 @@ const Deposit = () => {
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="Enter deposit amount (min $10)"
                       min="10"
-                      step="0.01"
                       className="w-full pl-10 pr-4 py-4 bg-slate-900/50 border border-green-500/20 rounded-lg text-white placeholder-slate-400 focus:border-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all"
                     />
                   </div>
