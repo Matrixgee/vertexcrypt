@@ -23,6 +23,7 @@ import Allusers from "../Admin/allusers";
 import AllWithdrawal from "../Admin/allwithdrawal";
 import AllTransactions from "../Admin/allTransactions";
 import UserDetails from "../Admin/userdetails";
+import Updatekyc from "../Clients/UpdateKyc";
 
 export const router = createBrowserRouter([
   {
@@ -102,6 +103,10 @@ export const router = createBrowserRouter([
       {
         path: "my-plans",
         element: <Plans />,
+      },
+      {
+        path: "updatekyc",
+        element: <Updatekyc />,
       },
     ],
   },

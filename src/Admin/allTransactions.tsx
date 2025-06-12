@@ -502,8 +502,8 @@ const AllTransactions: React.FC = () => {
 
         {/* Table */}
         {filteredTransactions.length > 0 ? (
-          <div className="bg-red-400 rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto h-screen">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
@@ -675,7 +675,7 @@ const AllTransactions: React.FC = () => {
 
       {/* Confirmation Modal */}
       {confirmModal.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[#0303034D] flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
