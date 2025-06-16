@@ -1,21 +1,30 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { persistReducer, persistStore } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
-import AdminSlice from '../Global/AdminSlice'
-import UserSlice from '../Global/UserSlice'
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import AdminSlice from "../Global/AdminSlice";
+import UserSlice from "../Global/UserSlice";
+import DropdownSlice from "../Global/Function";
 const rootReducer = combineReducers({
   admin: AdminSlice,
-  user: UserSlice
-})
+  user: UserSlice,
+  dropdown: DropdownSlice,
+});
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  whitelist: ['admin', 'user']
-}
+  whitelist: ["admin", "user", "dropdown"],
+};
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -25,9 +34,9 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-})
+});
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

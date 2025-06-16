@@ -24,6 +24,7 @@ import AllWithdrawal from "../Admin/allwithdrawal";
 import AllTransactions from "../Admin/allTransactions";
 import UserDetails from "../Admin/userdetails";
 import Updatekyc from "../Clients/UpdateKyc";
+import Market from "../Clients/market";
 
 export const router = createBrowserRouter([
   {
@@ -107,6 +108,10 @@ export const router = createBrowserRouter([
       {
         path: "updatekyc",
         element: <Updatekyc />,
+      },
+      {
+        path: "market",
+        element: <Market />,
       },
     ],
   },

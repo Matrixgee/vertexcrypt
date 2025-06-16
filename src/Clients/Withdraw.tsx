@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 
 import axios from "../config/axiosconfig";
 import toast from "react-hot-toast";
+import { MdArrowBack } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 type PaymentMethod = "btc" | "eth" | "usdt" | "bank" | "paypal";
 
@@ -107,6 +109,12 @@ const Withdraw = () => {
     return true;
   };
 
+  const nav = useNavigate();
+
+  const handleBack = () => {
+    nav(-1);
+  };
+
   const handleWithdraw = async () => {
     if (!amount || !walletAddress || !paymentMethod) {
       toast.error("Please fill all fields before withdrawing.");
@@ -179,39 +187,49 @@ const Withdraw = () => {
   }
 
   return (
-    <div className="min-h-screen text-white relative">
+    <div className="w-full scrollbar-thin overflow-y-scroll h-full bg-green-50 text-white relative">
       {/* Fixed background layers */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900/95 via-green-900/30 to-slate-900/95"></div>
-      <div className="fixed inset-0 bg-gradient-to-b from-green-400/5 to-green-500/5"></div>
+      {/* <div className="fixed inset-0 bg-gradient-to-br from-slate-900/95 via-green-900/30 to-slate-900/95"></div>
+      <div className="fixed inset-0 bg-gradient-to-b from-green-400/5 to-green-500/5"></div> */}
 
       {/* Fixed animated particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {/* <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-4 w-20 h-20 bg-green-400/10 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute bottom-20 right-4 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl animate-pulse delay-500"></div>
         <div className="absolute top-20 right-1/4 w-12 h-12 bg-green-400/8 rounded-full blur-lg animate-pulse delay-300"></div>
         <div className="absolute bottom-1/3 left-1/4 w-18 h-18 bg-emerald-400/6 rounded-full blur-xl animate-pulse delay-700"></div>
-      </div>
+      </div> */}
 
       {/* Scrollable content */}
-      <div className="relative overflow-y-auto h-screen custom-scrollbar">
+      <div className="relative overflow-y-auto h-full custom-scrollbar custom-scrollbar-hide">
         <div className="p-6 pb-20">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
-              <ArrowDownLeft className="w-8 h-8 mr-3 text-green-400" />
-              Withdrawal
-            </h1>
-            <p className="text-slate-300 text-lg">
-              Withdraw your earnings securely
-            </p>
+          <div className="mb-8 py-2 gap-5">
+            <div className="w-full h-12 bg-white shadow-md mb-6 rounded-xl flex  items-center px-4 sm:px-2 gap-4">
+              <div
+                className="flex items-center gap-2  text-green-600 font-semibold cursor-pointer transition hover:text-green-800"
+                onClick={handleBack}
+              >
+                <MdArrowBack size={20} />
+                <span className="text-sm sm:text-base font-semibold">Back</span>
+              </div>
+            </div>
+            <div className="">
+              <h1 className="text-2xl font-bold text-slate-800 mb-2 flex items-center">
+                Withdrawal
+              </h1>
+              <p className="text-slate-600 text-lg">
+                Withdraw your earnings securely
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Withdrawal Form */}
             <div className="lg:col-span-2 space-y-6">
               {/* Available Balance */}
-              <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+              <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                   <Wallet className="w-5 h-5 mr-2 text-green-400" />
                   Available Balance
@@ -236,7 +254,7 @@ const Withdraw = () => {
               </div>
 
               {/* Payment Method Selection */}
-              <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+              <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                   <CreditCard className="w-5 h-5 mr-2 text-green-400" />
                   Select Withdrawal Method
@@ -252,7 +270,7 @@ const Withdraw = () => {
                       className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
                         paymentMethod === method.id
                           ? "border-green-400/50 bg-green-500/10 shadow-lg shadow-green-500/10"
-                          : "border-green-500/20 bg-slate-900/30 hover:border-green-400/30"
+                          : "border-green-500/20 bg-slate-900 hover:border-green-400/30"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-3">
@@ -286,7 +304,7 @@ const Withdraw = () => {
               </div>
 
               {/* Amount and Address */}
-              <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+              <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                 <h2 className="text-xl font-bold text-white mb-4">
                   Withdrawal Details
                 </h2>
@@ -308,7 +326,7 @@ const Withdraw = () => {
                           selectedPaymentMethod?.minAmount || 0
                         }`}
                         min={selectedPaymentMethod?.minAmount || 0}
-                        className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-green-500/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all"
+                        className="w-full pl-10 pr-4 py-3 bg-slate-900 border border-green-500/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all"
                       />
                     </div>
                     {amount && !isValidAmount() && (
@@ -333,7 +351,7 @@ const Withdraw = () => {
                         "address"
                       }`}
                       rows={3}
-                      className="w-full px-4 py-3 bg-slate-900/50 border border-green-500/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all resize-none"
+                      className="w-full px-4 py-3 bg-slate-900 border border-green-500/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all resize-none"
                     />
                   </div>
                 </div>
@@ -343,7 +361,7 @@ const Withdraw = () => {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Withdrawal Summary */}
-              <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+              <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                 <h3 className="text-lg font-bold text-white mb-4">
                   Withdrawal Summary
                 </h3>
@@ -405,7 +423,7 @@ const Withdraw = () => {
               </div>
 
               {/* Important Notes */}
-              <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+              <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                 <h3 className="text-lg font-bold text-white mb-4 flex items-center">
                   <AlertCircle className="w-5 h-5 mr-2 text-green-400" />
                   Important Notes

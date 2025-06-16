@@ -9,6 +9,8 @@ import {
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "../config/axiosconfig";
+import { useNavigate } from "react-router-dom";
+import { MdArrowBack } from "react-icons/md";
 
 interface Transaction {
   _id: string;
@@ -25,6 +27,12 @@ interface Transaction {
 
 const History = () => {
   const [transactions, settransactions] = useState<Transaction[]>([]);
+
+  const nav = useNavigate();
+
+  const handleBack = () => {
+    nav(-1);
+  };
 
   const userToken = useSelector((state: any) => state.user.Token);
   useEffect(() => {
@@ -83,34 +91,32 @@ const History = () => {
   }, [userToken]);
 
   return (
-    <div className="min-h-screen text-white relative">
-      {/* Fixed background layers */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900/95 via-green-900/30 to-slate-900/95"></div>
-      <div className="fixed inset-0 bg-gradient-to-b from-green-400/5 to-green-500/5"></div>
-
-      {/* Fixed animated particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-4 w-20 h-20 bg-green-400/10 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-4 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl animate-pulse delay-500"></div>
-        <div className="absolute top-20 right-1/4 w-12 h-12 bg-green-400/8 rounded-full blur-lg animate-pulse delay-300"></div>
-        <div className="absolute bottom-1/3 left-1/4 w-18 h-18 bg-emerald-400/6 rounded-full blur-xl animate-pulse delay-700"></div>
-      </div>
-
+    <div className="w-full scrollbar-thin overflow-y-scroll h-full bg-green-50 text-white relative">
       {/* Scrollable content wrapper */}
-      <div className="relative overflow-y-auto h-screen">
+      <div className="relative overflow-y-auto h-full">
         <div className="p-6 pb-20">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Transaction History
-            </h1>
-            <p className="text-slate-300 text-lg">
-              View all your account transactions
-            </p>
+            <div className="w-full h-12 bg-white shadow-md mb-6 rounded-xl flex  items-center px-4 sm:px-2 gap-4">
+              <div
+                className="flex items-center gap-2  text-green-600 font-semibold cursor-pointer transition hover:text-green-800"
+                onClick={handleBack}
+              >
+                <MdArrowBack size={20} />
+                <span className="text-sm sm:text-base font-semibold">Back</span>
+              </div>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-slate-700 mb-2">
+                Transaction History
+              </h1>
+              <p className="text-slate-300 text-lg">
+                View all your account transactions
+              </p>
+            </div>
           </div>
 
-          <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl overflow-hidden hover:border-green-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10">
+          <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl overflow-hidden hover:border-green-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10">
             <div className="p-6 border-b border-green-500/20">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-white flex items-center">
