@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import axios from "../config/axiosconfig";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { MdArrowBack } from "react-icons/md";
 
 type InvestmentPlan = {
   _id: string;
@@ -29,6 +30,10 @@ type InvestmentPlan = {
 const Plans = () => {
   const [myPlans, setMyPlans] = useState<InvestmentPlan[]>([]);
   const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const userId = useSelector((state: { user: any }) => state.user.user?._id);
   const userToken = useSelector((state: { user: any }) => state.user.token);
@@ -91,13 +96,13 @@ const Plans = () => {
   };
 
   return (
-    <div className="w-full h-[100vh] scrollbar-thin overflow-y-scroll bg-gradient-to-br from-slate-900 via-green-900/70 to-slate-900">
+    <div className="w-full scrollbar-thin overflow-y-scroll h-full bg-green-50">
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-green-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
-      </div>
+      </div> */}
 
       <div className="relative  w-full h-max flex flex-col px-10 max-md:px-4 py-8 gap-6">
         {myPlans && myPlans.length > 0 ? (
@@ -108,7 +113,18 @@ const Plans = () => {
                 <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <div>
+                <div className="mb-8">
+                  <div className="w-full h-12 bg-white shadow-md mb-6 rounded-xl flex  items-center px-4 sm:px-2 gap-4">
+                    <div
+                      className="flex items-center gap-2  text-green-600 font-semibold cursor-pointer transition hover:text-green-800"
+                      onClick={handleBack}
+                    >
+                      <MdArrowBack size={20} />
+                      <span className="text-sm sm:text-base font-semibold">
+                        Back
+                      </span>
+                    </div>
+                  </div>
                   <h1 className="text-2xl font-bold text-white">
                     My Investments
                   </h1>
@@ -117,7 +133,7 @@ const Plans = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl">
+              <div className="flex items-center gap-2 px-4 py-2 bg-slate-9005 backdrop-blur-sm border border-white/10 rounded-xl">
                 <Activity className="w-5 h-5 text-green-400" />
                 <span className="text-green-400 font-medium">
                   Active Portfolio
@@ -130,7 +146,7 @@ const Plans = () => {
               {myPlans.map((plan) => (
                 <div
                   key={plan._id}
-                  className="group relative bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10"
+                  className="group relative bg-slate-9005 backdrop-blur-lg border border-white/10 rounded-2xl p-6 hover:bg-slate-90010 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10"
                 >
                   {/* Plan Header */}
                   <div className="flex items-center justify-between mb-6">
@@ -160,7 +176,7 @@ const Plans = () => {
                   {/* Investment Details Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {/* Amount */}
-                    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <div className="bg-slate-9005 rounded-xl p-4 border border-white/10">
                       <div className="flex items-center gap-2 mb-2">
                         <DollarSign className="w-4 h-4 text-green-400" />
                         <span className="text-gray-400 text-sm">
@@ -173,7 +189,7 @@ const Plans = () => {
                     </div>
 
                     {/* Duration */}
-                    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <div className="bg-slate-9005 rounded-xl p-4 border border-white/10">
                       <div className="flex items-center gap-2 mb-2">
                         <Clock className="w-4 h-4 text-blue-400" />
                         <span className="text-gray-400 text-sm">Duration</span>
@@ -184,7 +200,7 @@ const Plans = () => {
                     </div>
 
                     {/* Created Date */}
-                    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <div className="bg-slate-9005 rounded-xl p-4 border border-white/10">
                       <div className="flex items-center gap-2 mb-2">
                         <Calendar className="w-4 h-4 text-purple-400" />
                         <span className="text-gray-400 text-sm">Started</span>
@@ -199,13 +215,13 @@ const Plans = () => {
                     </div>
 
                     {/* Progress/Status */}
-                    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <div className="bg-slate-9005 rounded-xl p-4 border border-white/10">
                       <div className="flex items-center gap-2 mb-2">
                         <TrendingUp className="w-4 h-4 text-orange-400" />
                         <span className="text-gray-400 text-sm">Progress</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 bg-white/10 rounded-full h-2">
+                        <div className="flex-1 bg-slate-90010 rounded-full h-2">
                           <div
                             className="h-full bg-gradient-to-r from-green-400 to-blue-500 rounded-full transition-all duration-1000"
                             style={{
@@ -221,7 +237,7 @@ const Plans = () => {
                   </div>
 
                   {/* Hover Effect Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-bg-slate-900 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 </div>
               ))}
             </div>
@@ -231,10 +247,18 @@ const Plans = () => {
             {/* Empty State */}
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-gradient-to-r from-gray-500 to-gray-600 rounded-xl">
-                  <TrendingUp className="w-6 h-6 text-white" />
-                </div>
-                <div>
+                <div className="mb-4">
+                  <div className=" w-80 h-12 bg-white shadow-md mb-6 rounded-xl flex  items-center px-4 sm:px-2 gap-4">
+                    <div
+                      className="flex items-center gap-2  text-green-600 font-semibold cursor-pointer transition hover:text-green-800"
+                      onClick={handleBack}
+                    >
+                      <MdArrowBack size={20} />
+                      <span className="text-sm sm:text-base font-semibold">
+                        Back
+                      </span>
+                    </div>
+                  </div>
                   <h1 className="text-2xl font-bold text-white">
                     My Investments
                   </h1>
@@ -243,9 +267,9 @@ const Plans = () => {
               </div>
             </div>
 
-            <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg border border-white/20 rounded-2xl p-12 text-center">
+            <div className="relative bg-gradient-to-br from-white to-white backdrop-blur-lg border border-white/20 rounded-2xl p-12 text-center">
               {/* Background decoration */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-2xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-purple-500/5 rounded-2xl"></div>
 
               <div className="relative ">
                 <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-green-400 rounded-full flex items-center justify-center mx-auto mb-6">

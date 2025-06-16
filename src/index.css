@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.overview {
+  background-image: url("./assets/overviewbg.png");
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

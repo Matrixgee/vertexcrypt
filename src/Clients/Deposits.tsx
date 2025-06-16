@@ -23,6 +23,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "../config/axiosconfig";
 import { setDeposit } from "../Global/UserSlice";
 import { AxiosError } from "axios";
+import { MdArrowBack } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 type CryptoMethod = "btc" | "eth" | "usdt";
 
@@ -150,7 +152,11 @@ const Deposit = () => {
     if (fileInput) fileInput.value = "";
   };
 
-  // const nav = useNavigate();
+  const nav = useNavigate();
+
+  const handleBack = () => {
+    nav(-1);
+  };
 
   const handleSubmit = async () => {
     if (!proof) {
@@ -203,22 +209,22 @@ const Deposit = () => {
   };
 
   return (
-    <div className="min-h-screen text-white relative">
+    <div className="w-full scrollbar-thin overflow-y-scroll h-full bg-green-50 text-white relative">
       {/* Fixed background layers */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900/95 via-green-900/30 to-slate-900/95"></div>
-      <div className="fixed inset-0 bg-gradient-to-b from-green-400/5 to-green-500/5"></div>
+      {/* <div className="fixed inset-0 bg-gradient-to-br from-slate-900/95 via-green-900/30 to-slate-900/95"></div>
+      <div className="fixed inset-0 bg-gradient-to-b from-green-400/5 to-green-500/5"></div> */}
 
       {/* Fixed animated particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {/* <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-4 w-20 h-20 bg-green-400/10 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute bottom-20 right-4 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl animate-pulse delay-500"></div>
         <div className="absolute top-20 right-1/4 w-12 h-12 bg-green-400/8 rounded-full blur-lg animate-pulse delay-300"></div>
         <div className="absolute bottom-1/3 left-1/4 w-18 h-18 bg-emerald-400/6 rounded-full blur-xl animate-pulse delay-700"></div>
-      </div>
+      </div> */}
 
       {/* Scrollable content */}
-      <div className="relative overflow-y-auto h-screen custom-scrollbar">
+      <div className="relative overflow-y-auto h-full custom-scrollbar">
         <div className="p-6 pb-20">
           {/* Header */}
           <div className="mb-8">
@@ -231,16 +237,32 @@ const Deposit = () => {
                   <ArrowLeft className="w-5 h-5 text-green-400" />
                 </button>
               )}
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 flex items-center max-md:text-xl">
-                  {/* <Wallet className="w-8 h-8 mr-3 text-green-400" /> */}
-                  {showProof ? "Upload Proof of Payment" : "Make a Deposit"}
-                </h1>
-                <p className="text-slate-300 text-lg">
-                  {showProof
-                    ? "Upload your payment screenshot to complete the deposit"
-                    : "Fund your account securely with cryptocurrency"}
-                </p>
+              <div className="mb-8">
+                {/* Top Bar */}
+                <div className="w-full h-12 bg-white shadow-md rounded-xl flex  items-center px-4 sm:px-2 gap-4">
+                  <div
+                    className="flex items-center gap-2 text-green-600 font-semibold cursor-pointer transition hover:text-purple-800"
+                    onClick={handleBack}
+                  >
+                    <MdArrowBack size={20} />
+                    <span className="text-sm sm:text-base font-semibold">
+                      Back
+                    </span>
+                  </div>
+                </div>
+
+                {/* Header Text */}
+                <div className="mt-6">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-2 mb-2">
+                    {/* Optional icon: <Wallet className="w-7 h-7 text-green-500" /> */}
+                    {showProof ? "Upload Proof of Payment" : "Make a Deposit"}
+                  </h1>
+                  <p className="text-slate-600 text-base sm:text-lg">
+                    {showProof
+                      ? "Upload your payment screenshot to complete the deposit."
+                      : "Fund your account securely using cryptocurrency."}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -250,7 +272,7 @@ const Deposit = () => {
               {/* Left column: Payment Methods, Amount Input, Wallet Address */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Payment Methods */}
-                <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+                <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                   <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                     <CreditCard className="w-5 h-5 mr-2 text-green-400" />
                     Select Payment Method
@@ -266,7 +288,7 @@ const Deposit = () => {
                         className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
                           selectedMethod === method.id
                             ? "border-green-400/50 bg-green-500/10 shadow-lg shadow-green-500/10"
-                            : "border-green-500/20 bg-slate-900/30 hover:border-green-400/30"
+                            : "border-green-500/20 bg-slate-900 hover:border-green-400/30"
                         }`}
                       >
                         <div className="flex items-center justify-between mb-3">
@@ -306,7 +328,7 @@ const Deposit = () => {
                 </div>
 
                 {/* Amount Input */}
-                <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+                <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                   <h2 className="text-xl font-bold text-white mb-4">
                     Enter Amount
                   </h2>
@@ -320,7 +342,7 @@ const Deposit = () => {
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="Enter deposit amount (min $10)"
                       min="10"
-                      className="w-full pl-10 pr-4 py-4 bg-slate-900/50 border border-green-500/20 rounded-lg text-white placeholder-slate-400 focus:border-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all"
+                      className="w-full pl-10 pr-4 py-4 bg-slate-900 border border-green-500/20 rounded-lg text-white placeholder-slate-400 focus:border-green-400/50 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all"
                     />
                   </div>
                   {amount && !isValidAmount && (
@@ -332,11 +354,11 @@ const Deposit = () => {
                 </div>
 
                 {/* Wallet Address */}
-                <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+                <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                   <h2 className="text-xl font-bold text-white mb-4">
                     Payment Address
                   </h2>
-                  <div className="bg-slate-900/60 border border-green-500/10 rounded-lg p-4">
+                  <div className="bg-slate-900 border border-green-500/10 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-slate-300 text-sm">
                         {selectedPaymentMethod?.name} Address (
@@ -358,7 +380,7 @@ const Deposit = () => {
                         </span>
                       </button>
                     </div>
-                    <div className="break-all text-white font-mono text-sm bg-slate-900/80 p-3 rounded border border-green-500/10 hover:bg-slate-900/60 transition-colors">
+                    <div className="break-all text-white font-mono text-sm bg-slate-900 p-3 rounded border border-green-500/10 hover:bg-slate-900 transition-colors">
                       {cryptoAddresses[selectedMethod]}
                     </div>
                   </div>
@@ -368,7 +390,7 @@ const Deposit = () => {
               {/* Sidebar */}
               <div className="space-y-6">
                 {/* Deposit Summary */}
-                <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+                <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                   <h3 className="text-lg font-bold text-white mb-4">
                     Deposit Summary
                   </h3>
@@ -414,7 +436,7 @@ const Deposit = () => {
                 </div>
 
                 {/* Important Notes */}
-                <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+                <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                   <h3 className="text-lg font-bold text-white mb-4 flex items-center">
                     <AlertCircle className="w-5 h-5 mr-2 text-green-400" />
                     Important Notes
@@ -451,7 +473,7 @@ const Deposit = () => {
             <div className="max-w-4xl mx-auto">
               <div className="grid lg:grid-cols-2 gap-8">
                 {/* Upload Section */}
-                <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+                <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                   <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                     <Upload className="w-5 h-5 mr-2 text-green-400" />
                     Upload Payment Proof
@@ -482,7 +504,7 @@ const Deposit = () => {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 bg-slate-900/60 rounded-lg border border-green-500/20">
+                      <div className="flex items-center justify-between p-4 bg-slate-900 rounded-lg border border-green-500/20">
                         <div className="flex items-center space-x-3">
                           <FileText className="w-8 h-8 text-green-400" />
                           <div>
@@ -526,13 +548,13 @@ const Deposit = () => {
                 </div>
 
                 {/* Transaction Summary */}
-                <div className="bg-slate-900/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
+                <div className="bg-slate-900 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 hover:border-green-400/30 transition-all duration-300">
                   <h2 className="text-xl font-bold text-white mb-4">
                     Transaction Summary
                   </h2>
 
                   <div className="space-y-4">
-                    <div className="p-4 bg-slate-900/60 rounded-lg border border-green-500/10">
+                    <div className="p-4 bg-slate-900 rounded-lg border border-green-500/10">
                       <div className="flex items-center mb-3">
                         <div
                           className={`p-2 rounded-lg bg-gradient-to-br ${selectedPaymentMethod?.color} shadow-lg mr-3`}
