@@ -1,6 +1,6 @@
-import { motion} from "framer-motion"
-import { Phone, Mail, MapPin } from "lucide-react"
-import logo from '../assets/vertextone.png'
+import { motion } from "framer-motion";
+import { Phone, Mail, MapPin } from "lucide-react";
+import logo from "../assets/vertextone.png";
 
 const Footer = () => {
   return (
@@ -12,26 +12,36 @@ const Footer = () => {
               <img src={logo} alt="" className="h-[50px] w-[95px]" />
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
-              Your trusted partner in building wealth through smart investments. 
+              Your trusted partner in building wealth through smart investments.
               Start your journey to financial freedom today.
             </p>
             <div className="flex space-x-4">
-              {['Facebook', 'Twitter', 'LinkedIn', 'Instagram'].map((social) => (
-                <motion.div
-                  key={social}
-                  whileHover={{ scale: 1.1 }}
-                  className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
-                >
-                  <span className="text-sm font-semibold">{social[0]}</span>
-                </motion.div>
-              ))}
+              {["Facebook", "Twitter", "LinkedIn", "Instagram"].map(
+                (social) => (
+                  <motion.div
+                    key={social}
+                    whileHover={{ scale: 1.1 }}
+                    className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <span className="text-sm font-semibold">{social[0]}</span>
+                  </motion.div>
+                )
+              )}
             </div>
           </div>
-          
+
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-green-400">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4 text-green-400">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
-              {['Home', 'About Us', 'Services', 'Contact', 'Privacy Policy'].map((link) => (
+              {[
+                "Home",
+                "About Us",
+                "Services",
+                "Contact",
+                "Privacy Policy",
+              ].map((link) => (
                 <li key={link}>
                   <motion.a
                     whileHover={{ x: 5 }}
@@ -44,9 +54,11 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-green-400">Contact Info</h3>
+            <h3 className="text-lg font-semibold mb-4 text-green-400">
+              Contact Info
+            </h3>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-green-400" />
@@ -54,7 +66,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-green-400" />
-                <span className="text-gray-300">hello@VertexCrypt.com</span>
+                <span className="text-gray-300">support@vertexcrpt.com</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="w-4 h-4 text-green-400" />
@@ -63,7 +75,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">
             © 2025 VertexCrypt. All rights reserved.
@@ -74,4 +86,4 @@ const Footer = () => {
   );
 };
 
-export default Footer
+export default Footer;

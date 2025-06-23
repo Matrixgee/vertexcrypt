@@ -290,7 +290,7 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-1">Email Us</h4>
-                      <p className="text-green-100">contact@VertexCrypt.com</p>
+                      <p className="text-green-100"></p>
                       <p className="text-green-100">support@VertexCrypt.com</p>
                     </div>
                   </div>
