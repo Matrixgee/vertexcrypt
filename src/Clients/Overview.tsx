@@ -286,7 +286,7 @@ const Overview = () => {
     {
       id: 3,
       title: "Trade",
-      path: "/user/invest",
+      path: "/user/my-plans",
       icon: <RiCoinsLine size={20} />,
     },
   ];
@@ -342,7 +342,8 @@ const Overview = () => {
 
   const handleLogout = () => {
     dispatch(clearUser());
-    navigate("/auth/login");
+    localStorage.clear();
+    navigate("/login");
   };
 
   return (

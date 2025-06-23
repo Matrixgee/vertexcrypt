@@ -25,6 +25,8 @@ import AllTransactions from "../Admin/allTransactions";
 import UserDetails from "../Admin/userdetails";
 import Updatekyc from "../Clients/UpdateKyc";
 import Market from "../Clients/market";
+import Profile from "../Clients/Account";
+import Setting from "../Clients/Account/settings";
 
 export const router = createBrowserRouter([
   {
@@ -112,6 +114,14 @@ export const router = createBrowserRouter([
       {
         path: "market",
         element: <Market />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "setting",
+        element: <Setting />,
       },
     ],
   },
