@@ -34,7 +34,7 @@ const Login = () => {
     setLoading(true);
     const loadingId = toast.loading("Please wait");
     try {
-      const res = await axios.post("/user/login", formData);
+      const res = await axios.post("/auth/login", formData);
       console.log(res);
 
       const userId = res.data.data._id;

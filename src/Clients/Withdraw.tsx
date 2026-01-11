@@ -72,15 +72,9 @@ const Withdraw = () => {
   );
 
   const getOneUser = async () => {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      toast.error("User ID not found");
-      return;
-    }
-
     try {
       setLoading(true);
-      const res = await axios.get(`/user/userprofile/${userId}`, {
+      const res = await axios.get(`/user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -144,16 +138,12 @@ const Withdraw = () => {
     setIsProcessing(true);
 
     try {
-      const response = await axios.post(
-        `/user/withdraw/${userId}`,
-        requestData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.post(`/withdraw`, requestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       // Reset form fields
       setPaymentMethod("btc");
