@@ -86,6 +86,8 @@ const Deposit = () => {
   const dispatch = useDispatch();
   const userToken = useSelector((state: any) => state.user.Token);
   const user = useSelector((state: any) => state.user.User);
+  console.log(user.user.user);
+
   const navigate = useNavigate();
 
   const selectedPaymentMethod = useMemo(
@@ -162,7 +164,7 @@ const Deposit = () => {
         {
           amount: Number(amount), // ensures exact number
           method: selectedMethod,
-          from: user.username, // send username instead of crypto address
+          from: user.user.user.name, // send username instead of crypto address
         },
         {
           headers: {
@@ -305,7 +307,7 @@ const Deposit = () => {
                     value={amount}
                     onChange={(e) =>
                       setAmount(
-                        e.target.value ? parseFloat(e.target.value) : ""
+                        e.target.value === "" ? "" : Number(e.target.value)
                       )
                     }
                     placeholder="Enter deposit amount (min $10)"
