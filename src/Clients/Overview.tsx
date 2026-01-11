@@ -218,11 +218,9 @@ const Overview = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const userId = localStorage.getItem("userId");
-
   const getUser = async () => {
     try {
-      const response = await axios.get(`/user/userprofile/${userId}`, {
+      const response = await axios.get(`/user/profile`, {
         headers: {
           Authorization: `Bearer ${Token}`,
         },
@@ -259,13 +257,13 @@ const Overview = () => {
     {
       id: 1,
       title: "Total Withdraw",
-      content: formatNumber(user.totalWithdrawn),
+      content: formatNumber(user.totalWithdrawals || 0),
       icon: <BsCashCoin size={18} />,
     },
     {
       id: 2,
       title: "Total Deposit",
-      content: formatNumber(user.totalDeposit),
+      content: formatNumber(user.totalDeposits || 0),
       icon: <FaCoins size={18} />,
     },
   ];
@@ -356,7 +354,7 @@ const Overview = () => {
         <div className="flex flex-col">
           <p className="text-xs text-gray-500">Total portfolio</p>
           <p className="font-bold text-lg text-gray-800">
-            {formatNumber(user.accountBalance || 0)}
+            {formatNumber(user.balance || 0)}
           </p>
         </div>
 
@@ -391,9 +389,7 @@ const Overview = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <p className="font-medium text-xs text-white">
-                    {user.firstName}
-                  </p>
+                  <p className="font-medium text-xs text-white">{user.name}</p>
                   <p className="text-green-100 text-xs">{user.email}</p>
                 </div>
 
@@ -431,10 +427,7 @@ const Overview = () => {
         <div className="overview bg-green-600 rounded-lg overflow-hidden">
           <div className="p-4 flex flex-col items-center text-center">
             <h2 className="text-white text-lg font-bold mb-1">
-              Hello,{" "}
-              <span>
-                {user.firstName} {user.lastName}
-              </span>
+              Hello, <span>{user.name}</span>
             </h2>
             <p className="text-green-100 text-xs mb-3">
               Welcome to Block Crypto Investment

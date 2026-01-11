@@ -37,8 +37,8 @@ const Register = () => {
 
     if (
       !formData.firstName ||
-      !formData.userName ||
       !formData.lastName ||
+      !formData.userName ||
       !formData.email ||
       !formData.phoneNumber ||
       !formData.password ||
@@ -46,18 +46,31 @@ const Register = () => {
     ) {
       toast.error("Please fill all fields");
       toast.dismiss(toastLoadingId);
+      setLoading(false);
       return;
     }
 
-    if (formData.confirmPassword !== formData.password) {
+    if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
       toast.dismiss(toastLoadingId);
+      setLoading(false);
       return;
     }
 
     try {
-      const res = await axios.post("user/signup", formData);
+      const payload = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        username: formData.userName,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+        referralId: "",
+      };
+
+      const res = await axios.post("/auth/register", payload);
+
       toast.success(res.data.message);
+
       setFormData({
         firstName: "",
         lastName: "",
@@ -67,13 +80,13 @@ const Register = () => {
         password: "",
         confirmPassword: "",
       });
+
       setTimeout(() => {
         window.location.href = "/review";
-      });
-    } catch (error: any) {
+      }, 1500);
+    } catch (error) {
       if (isAxiosError(error)) {
-        const errorMsg = error.response?.data?.message || "An error occurred";
-        toast.error(errorMsg);
+        toast.error(error.response?.data?.message || "Registration failed");
       } else {
         toast.error("An unknown error occurred");
       }
