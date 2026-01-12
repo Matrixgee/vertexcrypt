@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "../config/axiosconfig";
 import { Search, User } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -63,8 +62,8 @@ const Allusers = () => {
 
   const navigate = useNavigate();
 
-  const handleManage = (_id: string) => {
-    navigate(`/admin/userdetails/${_id}`);
+  const handleManage = (id: string) => {
+    navigate(`/admin/userdetails/${id}`);
   };
 
   useEffect(() => {
