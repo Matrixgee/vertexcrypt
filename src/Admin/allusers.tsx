@@ -3,25 +3,28 @@ import axios from "../config/axiosconfig";
 import { Search, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+
 import { isAxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { setAllUsers } from "../Global/AdminSlice";
 
 type UserType = {
-  _id: string;
-  firstName: string;
-  lastName: string;
+  id: string;
+  name: string;
+  username: string;
   email: string;
-  status: string;
-  createdAt: string;
-  accountBalance: number;
+  balance: number;
+  verified: boolean;
+  type: "user" | "admin";
+  createdAt: number;
 };
 
 const Allusers = () => {
   const [users, setusers] = useState<UserType[]>([]);
 
-  const token = useSelector((state: any) => state.admin.token);
+  const token = localStorage.getItem("token");
+
+  const getUserStatus = (user: UserType) =>
+    user.verified ? "Approved" : "Pending";
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -36,18 +39,15 @@ const Allusers = () => {
     }
   };
 
-  const dispatch = useDispatch();
-
   const getAllusers = async () => {
     const toastloadingId = toast.loading("loading users...");
     try {
-      const res = await axios.get("/admin/getAllUser", {
+      const res = await axios.get("/admin/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setusers(res.data.data);
-      dispatch(setAllUsers(res.data.data));
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         const errorMsg =
@@ -111,7 +111,7 @@ const Allusers = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map((user) => (
-              <tr key={user._id} className="hover:bg-gray-50">
+              <tr key={user.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
@@ -121,7 +121,7 @@ const Allusers = () => {
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">
-                        {`${user.firstName} ${user.lastName}`}
+                        {user.name || user.username}
                       </div>
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </div>
@@ -130,21 +130,21 @@ const Allusers = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
                     className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
-                      user.status.charAt(0).toUpperCase() + user.status.slice(1)
+                      getUserStatus(user)
                     )}`}
                   >
-                    {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                    {getUserStatus(user)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {new Date(user.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  ${user.accountBalance}
+                  ${user.balance.toFixed(2)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                   <button
-                    onClick={() => handleManage(user._id)}
+                    onClick={() => handleManage(user.id)}
                     className="px-3 py-2 bg-green-400 rounded-md font-semibold"
                   >
                     Manage
