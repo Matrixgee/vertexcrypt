@@ -27,6 +27,7 @@ import Updatekyc from "../Clients/UpdateKyc";
 import Market from "../Clients/market";
 import Profile from "../Clients/Account";
 import Setting from "../Clients/Account/settings";
+import Adminlogin from "../Admin/adminlogin";
 
 export const router = createBrowserRouter([
   {
@@ -151,5 +152,9 @@ export const router = createBrowserRouter([
         element: <UserDetails />,
       },
     ],
+  },
+  {
+    path: "adminlogin",
+    element: <Adminlogin />,
   },
 ]);

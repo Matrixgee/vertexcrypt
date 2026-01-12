@@ -5,11 +5,8 @@ import axios from "../config/axiosconfig";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
-import { useDispatch } from "react-redux";
-import { setAdminToken } from "../Global/AdminSlice";
-import { setToken, setUser } from "../Global/UserSlice";
 
-const Login = () => {
+const Adminlogin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -17,8 +14,6 @@ const Login = () => {
   });
 
   const [loading, setLoading] = useState(false);
-
-  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,35 +35,29 @@ const Login = () => {
       const { token, data } = res.data;
       const user = data.user;
 
-      toast.success("Login successful");
+      // 🚫 BLOCK NON-ADMINS
+      if (user.type !== "admin") {
+        toast.error("Access denied. Admins only.");
+        return;
+      }
 
-      // 🔐 store token
+      // ✅ SAVE TOKEN
       localStorage.setItem("token", token);
-      localStorage.setItem("userId", user._id);
 
-      setTimeout(() => {
-        if (user.type === "admin") {
-          // ✅ ADMIN
-          dispatch(setAdminToken(token));
-          navigate("/admin/adminhome");
-        } else {
-          // ✅ USER
-          dispatch(setUser(user));
-          dispatch(setToken(token));
-          navigate("/user/overview");
-        }
-      }, 1500);
+      toast.success("Admin login successful");
+
+      navigate("/admin/adminhome");
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Login failed");
-      } else {
-        toast.error("Something went wrong");
       }
+      setFormData({ email: "", password: "" });
     } finally {
       setLoading(false);
       toast.dismiss(loadingId);
     }
   };
+
   // console.log(`VITE_DEVE_URL = https://vert-w5v9.onrender.com/api`);
 
   return (
@@ -88,7 +77,7 @@ const Login = () => {
           <img src={logo} alt="" className="h-[50px] w-[95px]" />
         </motion.div>
         <h2 className="text-2xl font-bold text-green-700 text-center mb-6">
-          Welcome Back
+          Welcome Back Admin
         </h2>
 
         <form onSubmit={handleLogin} className="w-full space-y-4">
@@ -154,4 +143,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Adminlogin;
