@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Eye, MoreVertical, Download, Search, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "../config/axiosconfig";
-import { useSelector, useDispatch } from "react-redux";
+
 import { BiLoaderCircle } from "react-icons/bi";
 
 interface Transaction {
@@ -19,10 +20,6 @@ interface Transaction {
 }
 
 // You'll need to import or define this action
-const adminTransactionView = (data: Transaction[]) => ({
-  type: "ADMIN_TRANSACTION_VIEW",
-  payload: data,
-});
 
 const AllTransactions: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -36,7 +33,6 @@ const AllTransactions: React.FC = () => {
     transactionId: string;
   }>({ open: false, action: null, transactionId: "" });
 
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -50,15 +46,11 @@ const AllTransactions: React.FC = () => {
   }>({ show: false, message: "", type: "success" });
 
   const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const userToken = useSelector((state: any) => state.admin.token);
-
+  const userToken = localStorage.getItem("token") || "";
   // Get transactions from Redux store if available
-  const reduxTransactions = useSelector(
-    (state: any) => state.admin.transactions || []
-  );
 
   const getAllTransactions = async () => {
-    const url = "/admin/allTransactions";
+    const url = "/admin/deposits/all";
     setLoading(true);
     setError(null);
 
@@ -69,7 +61,7 @@ const AllTransactions: React.FC = () => {
 
       const transactionData = response.data.data || response.data;
       setTransactions(transactionData);
-      dispatch(adminTransactionView(transactionData));
+
       setLoading(false);
     } catch (error: any) {
       console.error("Error fetching transactions:", error);
@@ -92,11 +84,6 @@ const AllTransactions: React.FC = () => {
   }, [userToken]);
 
   // Update local state when Redux state changes
-  useEffect(() => {
-    if (reduxTransactions.length > 0) {
-      setTransactions(reduxTransactions);
-    }
-  }, [reduxTransactions]);
 
   const confirmDeposit = async (transactionId: string) => {
     const confirmUrl = `/admin/approveDeposit/${transactionId}`;

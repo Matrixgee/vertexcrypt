@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import axios from "../config/axiosconfig";
-import { useSelector } from "react-redux";
 
 // Status color mapping
 const statusColors = {
@@ -26,12 +25,12 @@ type Withdrawal = {
 
 const AllWithdrawal = () => {
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
-  const userToken = useSelector((state: any) => state.admin.token);
+  const userToken = localStorage.getItem("token");
 
   // Fetch all withdrawals
   const fetchWithdrawals = async () => {
     try {
-      const response = await axios.get("/admin/getWithdrawals", {
+      const response = await axios.get("/admin/withdrawals/all", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },

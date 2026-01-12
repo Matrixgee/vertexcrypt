@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { ArrowDownLeft, CreditCard, DollarSign, Users } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
+
 import { toast } from "react-hot-toast";
 import axios from "../config/axiosconfig";
-import { setAllUsers } from "../Global/AdminSlice"; // adjust imports as needed
 
 const AdminOverview = () => {
-  const dispatch = useDispatch();
-  const userToken = useSelector((state: any) => state.admin.token);
-
   type Transaction = { amount?: number; [key: string]: any };
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [users, setUsers] = useState([]);
@@ -18,6 +14,8 @@ const AdminOverview = () => {
   const [loading, setLoading] = useState(false);
 
   console.log(loading);
+
+  const Token = localStorage.getItem("token");
 
   useEffect(() => {
     getAllTransactions();
@@ -28,8 +26,8 @@ const AdminOverview = () => {
   const getAllTransactions = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/admin/allTransactions", {
-        headers: { Authorization: `Bearer ${userToken}` },
+      const response = await axios.get("/admin/deposits/all", {
+        headers: { Authorization: `Bearer ${Token}` },
       });
       const data = response.data.data || response.data;
       setTransactions(data);
@@ -46,11 +44,10 @@ const AdminOverview = () => {
   const getAllUsers = async () => {
     const toastId = toast.loading("Loading users...");
     try {
-      const response = await axios.get("/admin/getAllUser", {
-        headers: { Authorization: `Bearer ${userToken}` },
+      const response = await axios.get("/admin/users", {
+        headers: { Authorization: `Bearer ${Token}` },
       });
       setUsers(response.data.data);
-      dispatch(setAllUsers(response.data.data));
     } catch (error: any) {
       const msg = error.response?.data?.message || "Failed to fetch users.";
       toast.error(msg);
@@ -61,8 +58,8 @@ const AdminOverview = () => {
 
   const fetchWithdrawals = async () => {
     try {
-      const response = await axios.get("/admin/getWithdrawals", {
-        headers: { Authorization: `Bearer ${userToken}` },
+      const response = await axios.get("/admin/withdrawals/all", {
+        headers: { Authorization: `Bearer ${Token}` },
       });
       setWithdrawals(response.data.data);
     } catch (error) {
