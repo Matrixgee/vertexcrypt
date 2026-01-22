@@ -200,7 +200,7 @@ const UserDetails = () => {
 
       {/* MODALS */}
       <CreditDebitModal
-        _id={uid}
+        uid={uid}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
