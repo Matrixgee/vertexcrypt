@@ -1,144 +1,128 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import axios from "../../config/axiosconfig";
 import { toast } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import { setAllUsers } from "../../Global/AdminSlice";
 
 interface CreditDebitModalProps {
   isOpen: boolean;
   onClose: () => void;
-  _id: string | undefined;
-}
-
-interface RootState {
-  admin: {
-    token: string;
-  };
-  user: {
-    token: string;
-  };
+  uid: string | undefined;
 }
 
 const CreditDebitModal: React.FC<CreditDebitModalProps> = ({
   isOpen,
   onClose,
-  _id,
+  uid,
 }) => {
-  const [amount, setAmount] = useState<number | undefined>();
-  const [selectedOption, setSelectedOption] = useState<string>("");
-  const [selectedType, setSelectedType] = useState<string>("");
-  const [creditLoading, setCreditLoading] = useState<boolean>(false);
-  const dispatch = useDispatch();
-  const userToken = useSelector((state: RootState) => state.admin.token);
+  const [amount, setAmount] = useState<number | string>("");
+  const [wallet, setWallet] = useState<string>("");
+  const [action, setAction] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(Number(e.target.value));
-  };
-
-  const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value);
-  };
-
-  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedType(e.target.value);
-  };
-
-  const handleCreditDebitUser = async () => {
-    if (
-      !amount ||
-      !selectedOption ||
-      !selectedType ||
-      (selectedType !== "credit" && selectedType !== "debit")
-    ) {
-      alert("All fields are required");
+  const handleSubmit = async () => {
+    if (!uid || !wallet || !action || Number(amount) <= 0) {
+      toast.error("All fields are required");
       return;
     }
 
-    if (!_id) {
-      alert("Invalid user ID");
+    const adminToken = localStorage.getItem("token");
+
+    if (!adminToken) {
+      toast.error("Admin not authenticated");
       return;
     }
 
-    const toastLoadingId = toast.loading("Please wait...");
-    setCreditLoading(true);
+    const toastId = toast.loading("Processing...");
+    setLoading(true);
+
     try {
-      const url = `/admin/creditOrDebit/${_id}`;
-      const token = userToken;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      const data = {
-        type: selectedType,
-        amount,
-        field: selectedOption,
-      };
-      const response = await axios.put(url, data, { headers });
-      dispatch(setAllUsers(response.data.data));
-      toast.success(response.data.message);
-    } catch (error) {
-      console.error("Error handling credit/debit:", error);
-      toast.error("An error occurred");
-    } finally {
-      setCreditLoading(false);
-      toast.dismiss(toastLoadingId);
+      const res = await axios.put(
+        `/admin/credit/${uid}`,
+        {
+          wallet,
+          amount,
+          action,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        },
+      );
+
+      toast.success(res.data.message || "Balance updated successfully");
       onClose();
+    } catch (error: any) {
+      console.error("Credit/Debit error:", error);
+      toast.error(error?.response?.data?.message || "Failed to update balance");
+    } finally {
+      toast.dismiss(toastId);
+      setLoading(false);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-green-800 opacity-95 flex justify-center items-center z-50">
-      <div className="bg-white w-96 p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-medium mb-4">Credit/Debit User</h2>
-        <div className="mb-4">
-          <label className="block font-medium">Amount:</label>
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+      <div className="bg-white w-[400px] p-6 rounded-xl shadow-lg">
+        <h2 className="text-xl font-semibold mb-4">Credit / Debit User</h2>
+
+        {/* Amount */}
+        <div className="mb-3">
+          <label className="block mb-1 font-medium">Amount</label>
           <input
-            type="number"
-            className="border p-2 rounded-md w-full"
+            // type="number"
+            className="w-full border rounded-md p-2"
             value={amount}
-            onChange={handleAmountChange}
+            onChange={(e) => setAmount(Number(e.target.value))}
           />
         </div>
-        <div className="mb-4">
-          <label className="block font-medium">Select Where:</label>
+
+        {/* Wallet */}
+        <div className="mb-3">
+          <label className="block mb-1 font-medium">Wallet</label>
           <select
-            className="border p-2 rounded-md w-full"
-            value={selectedOption}
-            onChange={handleOptionChange}
+            className="w-full border rounded-md p-2"
+            value={wallet}
+            onChange={(e) => setWallet(e.target.value)}
           >
-            <option value="">Select Option</option>
-            <option value="referralBonus">Referral Bonus</option>
-            <option value="totalProfit">Total Profit</option>
-            <option value="accountBalance">Account Balance</option>
-            <option value="totalBonus">Total Bonus</option>
+            <option value="">Select Wallet</option>
+            <option value="balance">Main Balance</option>
+            <option value="bitcoin">Bitcoin</option>
+            <option value="ethereum">Ethereum</option>
+            <option value="sol">Solana</option>
           </select>
         </div>
+
+        {/* Action */}
         <div className="mb-4">
-          <label className="block font-medium">Select Type:</label>
+          <label className="block mb-1 font-medium">Action</label>
           <select
-            className="border p-2 rounded-md w-full"
-            value={selectedType}
-            onChange={handleTypeChange}
+            className="w-full border rounded-md p-2"
+            value={action}
+            onChange={(e) => setAction(e.target.value)}
           >
-            <option value="">Select Type</option>
+            <option value="">Select Action</option>
             <option value="credit">Credit</option>
             <option value="debit">Debit</option>
           </select>
         </div>
-        <div className="flex justify-end">
+
+        {/* Buttons */}
+        <div className="flex justify-end gap-3">
           <button
-            className="py-2 px-4 bg-blue-500 text-white rounded-md mr-2"
-            onClick={handleCreditDebitUser}
-            disabled={creditLoading}
-          >
-            Submit
-          </button>
-          <button
-            className="py-2 px-4 bg-gray-300 text-gray-800 rounded-md"
             onClick={onClose}
+            className="px-4 py-2 bg-gray-200 rounded-md"
           >
             Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
+          >
+            {loading ? "Processing..." : "Submit"}
           </button>
         </div>
       </div>
