@@ -11,8 +11,6 @@ import {
   Database,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { clearAdmin } from "../Global/AdminSlice";
 
 interface AdminHeaderProps {
   active: boolean;
@@ -25,8 +23,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ active, setActive }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [notifications] = useState(3); // Mock notification count for admin
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -61,7 +57,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ active, setActive }) => {
   };
 
   const handleLogout = () => {
-    dispatch(clearAdmin());
+    localStorage.removeItem("token");
     navigate("/login");
     console.log("Admin logout clicked");
   };

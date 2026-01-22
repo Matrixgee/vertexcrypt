@@ -1,426 +1,219 @@
 import { FaCaretDown } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../config/axiosconfig";
-import { setOneUser } from "../Global/AdminSlice";
 import CreditDebitModal from "../components/AllModals/creditdebitmodal";
-import ConfirmSuspendModal from "../components/AllModals/confirmsuspendmodal";
-import ConfirmUnsuspendModal from "../components/AllModals/confirmunsuspendmodal";
 import ConfirmDeleteModal from "../components/AllModals/ConfirmDeleteModal";
-import ConfirmClearAcct from "../components/AllModals/ConfirmClearAcct";
+// import ConfirmClearAcct from "../components/AllModals/ConfirmClearAcct";
 import toast from "react-hot-toast";
 
+/* ===================== TYPES ===================== */
 interface UserData {
-  phoneNumber: string | number | readonly string[] | undefined;
-  firstName: string;
-  lastName: string;
+  id: string;
+  uid: string;
+  name: string;
+  username: string;
   email: string;
-  phone: string;
-  nationality: string;
-  accountBalance: number;
-  totalProfit: number;
-  referralBonus: number;
-  totalBonus: number;
-  investmentPlan: number;
-  status: string;
-  login: boolean;
-  isVerified: boolean;
-  createdAt: string;
-  _id: string;
+
+  balance: number;
+  earnings: number;
+
+  verified: boolean;
+  type: "user" | "admin";
+
+  createdAt: number;
 }
 
-interface RootState {
-  admin: {
-    oneUser: UserData | null;
-    token: string;
-  };
-  user: {
-    oneUser: UserData | null;
-  };
-}
-
+/* ===================== COMPONENT ===================== */
 const UserDetails = () => {
+  const { uid } = useParams<{ uid: string }>();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const [user, setUser] = useState<UserData | null>(null);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
-  const [isUnsuspendModalOpen, setIsUnsuspendModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isClearModalOpen, setIsClearModalOpen] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const userToken = useSelector((state: RootState) => state.admin.token);
+  // const [isClearModalOpen, setIsClearModalOpen] = useState(false);
 
-  const oneUser = useSelector((state: RootState) => state.admin.oneUser);
-  const { _id } = useParams<{ _id: string }>();
-
-  console.log(_id);
-
-  const verifyUser = async () => {
-    const toastloadinId = toast.loading("Please wait...");
-    const verifyUrl = `/admin/verifyUser/${_id}`;
-    const headers = {
-      Authorization: `Bearer ${userToken}`,
-    };
-
-    try {
-      await axios.put(verifyUrl, {}, { headers });
-      dispatch(setOneUser({ ...oneUser, isVerified: true }));
-    } catch (error) {
-      console.error("Error verifying user:", error);
-    } finally {
-      toast.dismiss(toastloadinId);
-    }
-  };
-
-  const unsuspendUser = async () => {
-    const toastloadinId = toast.loading("Please wait...");
-    const unsuspendUrl = `/admin/unsuspendUser/${_id}`;
-    const headers = {
-      Authorization: `Bearer ${userToken}`,
-    };
-    try {
-      const response = await axios.put(unsuspendUrl, {}, { headers });
-      dispatch(setOneUser({ ...oneUser, status: "approved" }));
-      console.log(response.data.data);
-    } catch (error) {
-      console.error("Error unsuspending user:", error);
-    } finally {
-      toast.dismiss(toastloadinId);
-    }
-  };
-
-  const suspendUser = async () => {
-    const toastloadinId = toast.loading("Please wait...");
-    const suspendUrl = `/admin/suspendUser/${_id}`;
-    const headers = {
-      Authorization: `Bearer ${userToken}`,
-    };
-    try {
-      await axios.put(suspendUrl, {}, { headers });
-      dispatch(setOneUser({ ...oneUser, status: "suspended" }));
-      console.log("User suspended successfully");
-    } catch (error) {
-      console.error("Error suspending user:", error);
-    } finally {
-      toast.dismiss(toastloadinId);
-    }
-  };
-
-  const deleteUser = async () => {
-    const toastloadinId = toast.loading("Please wait...");
-    const deleteUrl = `/admin/deleteOneUser/${_id}`;
-    const headers = {
-      Authorization: `Bearer ${userToken}`,
-    };
-
-    try {
-      await axios.delete(deleteUrl, { headers });
-      navigate(-1); // Navigate back to the previous page after deletion
-      console.log("User deleted successfully");
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    } finally {
-      toast.dismiss(toastloadinId);
-    }
-  };
-
-  const clearAcct = async () => {
-    const toastloadinId = toast.loading("Please wait...");
-    try {
-      const response = await axios.delete(`/admin/clearAccount/${_id}`, {
-        headers: { Authorization: `Bearer ${userToken}` },
-      });
-      dispatch(setOneUser(response.data));
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      toast.dismiss(toastloadinId);
-    }
-  };
-
+  /* ===================== FETCH USER ===================== */
   useEffect(() => {
     const fetchUser = async () => {
-      const url = `/admin/getOne/${_id}`;
-      const headers = {
-        Authorization: `Bearer ${userToken}`,
-      };
-
       try {
-        const response = await axios.get<{ data: UserData }>(url, { headers });
-        dispatch(setOneUser(response.data.data));
-      } catch (error) {
-        console.error("Error fetching user:", error);
+        const res = await axios.get(`/admin/users/${uid}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(res.data.data);
+      } catch {
+        toast.error("Failed to load user");
       }
     };
 
     fetchUser();
-  }, [_id, userToken, dispatch]);
+  }, [uid, token]);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  /* ===================== ACTIONS ===================== */
+  // const verifyUser = async () => {
+  //   const t = toast.loading("Verifying user...");
+  //   try {
+  //     await axios.put(
+  //       `/admin/verifyUser/${uid}`,
+  //       {},
+  //       { headers: { Authorization: `Bearer ${token}` } },
+  //     );
+  //     setUser((prev) => prev && { ...prev, verified: true });
+  //   } finally {
+  //     toast.dismiss(t);
+  //   }
+  // };
 
-  const handleBack = () => {
-    navigate(-1); // Navigate back to the previous page
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
-  const openSuspendModal = () => {
-    setIsSuspendModalOpen(true);
-  };
-
-  const closeSuspendModal = () => {
-    setIsSuspendModalOpen(false);
-  };
-
-  const openUnsuspendModal = () => {
-    setIsUnsuspendModalOpen(true);
-  };
-
-  const closeUnsuspendModal = () => {
-    setIsUnsuspendModalOpen(false);
-  };
-
-  const openDeleteModal = () => {
-    setIsDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
-  const OpenClearModal = () => {
-    setIsClearModalOpen(true);
-  };
-  const closeClearModal = () => {
-    setIsClearModalOpen(false);
-  };
-
-  if (!oneUser) {
-    return <div>Loading...</div>; // Placeholder for loading state
-  }
-
-  // Function to determine status color
-  const getStatusColor = () => {
-    if (oneUser.status === "approved") {
-      return "bg-green-500 uppercase";
-    } else if (oneUser.status === "suspended") {
-      return "bg-red-500 uppercase";
-    } else if (oneUser.status === "pending") {
-      return "bg-yellow-500 uppercase";
-    } else {
-      return "bg-grey-400"; // Default color if status is undefined or unexpected
+  const deleteUser = async () => {
+    const t = toast.loading("Deleting user...");
+    try {
+      await axios.delete(`/admin/users/${uid}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      navigate(-1);
+    } finally {
+      toast.dismiss(t);
     }
   };
 
+  // const clearAcct = async () => {
+  //   const t = toast.loading("Clearing account...");
+  //   try {
+  //     const res = await axios.delete(`/admin/clearAccount/${uid}`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     setUser(res.data.data);
+  //   } finally {
+  //     toast.dismiss(t);
+  //   }
+  // };
+
+  /* ===================== HELPERS ===================== */
+  if (!user) return <div className="p-6">Loading...</div>;
+
+  const firstName = user.name?.split(" ")[0] || "—";
+  const lastName = user.name?.split(" ").slice(1).join(" ");
+
+  // const statusColor = user.verified ? "bg-green-500" : "bg-yellow-500";
+  // const statusText = user.verified ? "VERIFIED" : "UNVERIFIED";
+
+  /* ===================== UI ===================== */
   return (
-    <div className="w-full h-screen overflow-y-auto ">
-      <div
-        className={`w-full h-24 flex justify-between px-8 items-center max-md:h-[7rem] max-md:justify-center gap-2 max-md:flex-col`}
-      >
-        <p className="font-medium text-2xl">
-          {oneUser.firstName} {oneUser.lastName}
+    <div className="w-full h-screen overflow-y-auto">
+      {/* HEADER */}
+      <div className="w-full h-24 flex justify-between px-8 items-center">
+        <p className="text-2xl font-semibold">
+          {firstName} {lastName}
         </p>
-        <div className="relative w-2/5 h-12 flex justify-center gap-2 items-center max-md:w-[100%]">
+
+        <div className="relative flex gap-2">
           <button
-            className="py-2 px-6 bg-red-500 rounded-md text-white"
-            onClick={handleBack}
+            className="px-5 py-2 bg-red-500 text-white rounded"
+            onClick={() => navigate(-1)}
           >
             Back
           </button>
+
           <button
-            className="w-[28%] h-[85%] flex justify-center rounded-md text-white items-center gap-1 bg-blue-500"
-            onClick={toggleDropdown}
+            className="px-5 py-2 bg-blue-500 text-white rounded flex items-center gap-1"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             Actions <FaCaretDown />
           </button>
+
           {isDropdownOpen && (
-            <div className="absolute top-12 left-40 w-40 bg-white shadow-md rounded-md z-10">
-              <ul className="flex flex-col">
-                {oneUser.status === "suspended" ? (
-                  <li
-                    className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
-                    onClick={openUnsuspendModal}
-                  >
-                    Unsuspend
-                  </li>
-                ) : (
-                  <li
-                    className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
-                    onClick={openSuspendModal}
-                  >
-                    Suspend
-                  </li>
-                )}
-                <li
-                  className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
-                  onClick={toggleModal}
-                >
-                  Credit/Debit user
-                </li>
-                <li
-                  className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
+            <div className="absolute right-0 top-12 w-44 bg-white shadow rounded">
+              <ul>
+                {/* <li
                   onClick={verifyUser}
+                  className="p-3 hover:bg-gray-100 cursor-pointer"
                 >
-                  Verify user
-                </li>
+                  Verify User
+                </li> */}
                 <li
-                  className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
-                  onClick={openDeleteModal}
+                  onClick={() => setIsModalOpen(true)}
+                  className="p-3 hover:bg-gray-100 cursor-pointer"
                 >
-                  Delete user
+                  Credit / Debit
                 </li>
-                <li
-                  className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
-                  onClick={OpenClearModal}
+                {/* <li
+                  onClick={() => setIsClearModalOpen(true)}
+                  className="p-3 hover:bg-gray-100 cursor-pointer"
                 >
-                  Clear acct
+                  Clear Account
+                </li> */}
+                <li
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="p-3 hover:bg-gray-100 cursor-pointer text-red-500"
+                >
+                  Delete User
                 </li>
               </ul>
             </div>
           )}
         </div>
       </div>
-      <div className="w-full h-40 flex justify-center items-center max-md:h-[50rem]">
-        <div className="w-11/12 h-5/6 border-2 flex justify-between items-center max-md:w-[80%] max-md:flex-col">
-          <div className="w-1/5 h-full flex justify-around flex-col px-2 items-center max-md:w-[90%]">
-            <div className="w-full h-2/5 flex justify-around items-center flex-col max-md:items-start">
-              <p>Account Balance</p>
-              <p>${oneUser.accountBalance}</p>
-            </div>
-            <div className="w-full h-2/5 flex justify-around items-center flex-col max-md:items-start">
-              <p>User Acct Status</p>
-              <p
-                className={`py-2 px-3 rounded-md text-white ${getStatusColor()}`}
-              >
-                {oneUser.status}
-              </p>
-            </div>
-          </div>
-          <div className="w-1/5 h-full flex justify-around flex-col px-2 items-center max-md:w-[90%]">
-            <div className="w-full h-2/5 flex justify-around items-center flex-col max-md:items-start">
-              <p>Profit</p>
-              <p>${oneUser.totalProfit}</p>
-            </div>
-            <div className="w-full h-2/5 flex justify-around items-center flex-col max-md:items-start">
-              <p>Inv. Plans</p>
-              <p>
-                {oneUser.investmentPlan > 0 ? "Has Inv plans" : "No Inv plans"}
-              </p>
-            </div>
-          </div>
-          <div className="w-1/5 h-full flex justify-around flex-col px-2 items-center max-md:w-[90%]">
-            <div className="w-full h-2/5 flex justify-around items-center flex-col max-md:items-start">
-              <p>Referral Bonus</p>
-              <p>${oneUser.referralBonus}</p>
-            </div>
-          </div>
-          <div className="w-1/5 h-full flex justify-around flex-col px-2 items-center max-md:w-[90%]">
-            <div className="w-full h-2/5 flex justify-around items-center flex-col max-md:items-start">
-              <p>Bonus</p>
-              <p>${oneUser.totalBonus}</p>
-            </div>
-            <div className="w-full h-2/5 flex justify-around items-center flex-col max-md:items-start">
-              <p>Trade Mode</p>
-              <p
-                className={`py-0 px-3 rounded-md text-white ${
-                  oneUser.login ? "bg-green-500" : "bg-red-500"
-                }`}
-              >
-                {oneUser.login ? "On" : "Off"}
-              </p>
-            </div>
-          </div>
+
+      {/* STATUS */}
+      {/* <div className="px-8">
+        <span className={`px-4 py-2 text-white rounded ${statusColor}`}>
+          {statusText}
+        </span>
+      </div> */}
+
+      {/* USER INFO */}
+      <div className="p-8 grid grid-cols-2 gap-6">
+        <div>
+          <p className="font-semibold">Username</p>
+          <p>{user.username}</p>
+        </div>
+
+        <div>
+          <p className="font-semibold">Email</p>
+          <p>{user.email}</p>
+        </div>
+
+        <div>
+          <p className="font-semibold">Balance</p>
+          <p>${user.balance.toFixed(2)}</p>
+        </div>
+
+        <div>
+          <p className="font-semibold">Earnings</p>
+          <p>${user.earnings.toFixed(2)}</p>
+        </div>
+
+        <div>
+          <p className="font-semibold">User Type</p>
+          <p className="uppercase">{user.type}</p>
+        </div>
+
+        <div>
+          <p className="font-semibold">Joined</p>
+          <p>{new Date(user.createdAt).toLocaleDateString()}</p>
         </div>
       </div>
-      <div className="w-11/12 mx-auto bg-gray-50 mt-6 h-[30rem]">
-        <div className="w-full h-16 flex justify-start px-7 items-center">
-          <p className="text-2xl">User Information</p>
-        </div>
-        <div className="w-full p-8">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col">
-              <label className="font-medium text-lg">First Name</label>
-              <input
-                type="text"
-                className="border p-2 rounded-md"
-                value={oneUser.firstName}
-                readOnly
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="font-medium text-lg">Last Name</label>
-              <input
-                type="text"
-                className="border p-2 rounded-md"
-                value={oneUser.lastName}
-                readOnly
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="font-medium text-lg">Email Address</label>
-              <input
-                type="email"
-                className="border p-2 rounded-md"
-                value={oneUser.email}
-                readOnly
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="font-medium text-lg">Phone</label>
-              <input
-                type="text"
-                className="border p-2 rounded-md"
-                value={oneUser.phoneNumber}
-                readOnly
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="font-medium text-lg">Country</label>
-              <input
-                type="text"
-                className="border p-2 rounded-md"
-                value={oneUser.nationality}
-                readOnly
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="font-medium text-lg">Date Joined</label>
-              <input
-                type="text"
-                className="border p-2 rounded-md"
-                value={new Date(oneUser.createdAt).toLocaleDateString()}
-                readOnly
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <CreditDebitModal _id={_id} isOpen={isModalOpen} onClose={toggleModal} />
-      <ConfirmSuspendModal
-        isOpen={isSuspendModalOpen}
-        onClose={closeSuspendModal}
-        onConfirm={suspendUser}
-      />
-      <ConfirmUnsuspendModal
-        isOpen={isUnsuspendModalOpen}
-        onClose={closeUnsuspendModal}
-        onConfirm={unsuspendUser}
+
+      {/* MODALS */}
+      <CreditDebitModal
+        _id={uid}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
       <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
-        onClose={closeDeleteModal}
+        onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={deleteUser}
       />
-      <ConfirmClearAcct
+      {/* <ConfirmClearAcct
         isOpen={isClearModalOpen}
-        onClose={closeClearModal}
+        onClose={() => setIsClearModalOpen(false)}
         onConfirm={clearAcct}
-      />
+      /> */}
     </div>
   );
 };
