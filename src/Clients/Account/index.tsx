@@ -22,7 +22,7 @@ const Profile = () => {
 
     setLoading(true);
     try {
-      const res = await axios.get(`/user/userprofile/${userId}`, {
+      const res = await axios.get(`/user/profile`, {
         headers: { Authorization: `Bearer ${Token}` },
       });
       setProfile(res.data.data);
@@ -85,9 +85,7 @@ const Profile = () => {
           <input
             type="text"
             placeholder="Enter name"
-            value={`${profile.firstName || ""} ${
-              profile.lastName || ""
-            }`.trim()}
+            value={profile.name || ""}
             readOnly
             className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
           />
@@ -96,7 +94,7 @@ const Profile = () => {
         {[
           {
             label: "Username",
-            field: "userName",
+            field: "username",
             placeholder: "Enter username",
           },
           {

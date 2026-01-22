@@ -148,7 +148,7 @@ export const router = createBrowserRouter([
         element: <AllTransactions />,
       },
       {
-        path: "userdetails/:_id",
+        path: "userdetails/:uid",
         element: <UserDetails />,
       },
     ],

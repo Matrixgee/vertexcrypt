@@ -38,7 +38,7 @@ const History = () => {
   useEffect(() => {
     const getHistory = async () => {
       try {
-        const response = await axios.get("/user/history", {
+        const response = await axios.get("/deposit/all", {
           headers: { Authorization: `Bearer ${userToken}` },
         });
 
@@ -68,8 +68,8 @@ const History = () => {
                 tx.status.toLowerCase() === "approved"
                   ? "deposit"
                   : tx.status.toLowerCase() === "failed"
-                  ? "withdrawal"
-                  : "pending",
+                    ? "withdrawal"
+                    : "pending",
 
               transationType: tx.mode,
               description: `Crypto deposit via ${tx.mode.toUpperCase()}`,
@@ -143,8 +143,8 @@ const History = () => {
                           transaction.type === "deposit"
                             ? "bg-gradient-to-br from-green-400 to-green-600"
                             : transaction.type === "profit"
-                            ? "bg-gradient-to-br from-emerald-400 to-emerald-600"
-                            : "bg-gradient-to-br from-blue-400 to-blue-600"
+                              ? "bg-gradient-to-br from-emerald-400 to-emerald-600"
+                              : "bg-gradient-to-br from-blue-400 to-blue-600"
                         }`}
                       >
                         {transaction.type === "deposit" ? (
@@ -172,8 +172,8 @@ const History = () => {
                           transaction.type === "profit"
                             ? "text-green-400"
                             : transaction.type === "withdrawal"
-                            ? "text-red-400"
-                            : "text-white"
+                              ? "text-red-400"
+                              : "text-white"
                         }`}
                       >
                         {transaction.amount}

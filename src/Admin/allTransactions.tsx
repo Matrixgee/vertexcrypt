@@ -80,7 +80,7 @@ const AllTransactions: React.FC = () => {
 
   const updateStatus = async (
     transactionId: string,
-    status: "approved" | "rejected"
+    status: "approved" | "rejected",
   ) => {
     setActionLoading(transactionId);
 
@@ -90,17 +90,17 @@ const AllTransactions: React.FC = () => {
         { status },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       setTransactions((prev) =>
-        prev.map((tx) => (tx.id === transactionId ? { ...tx, status } : tx))
+        prev.map((tx) => (tx.id === transactionId ? { ...tx, status } : tx)),
       );
 
       toast.success(`Transaction ${status}`);
     } catch (err: any) {
       toast.error(
-        err.response?.data?.message || "Failed to update transaction"
+        err.response?.data?.message || "Failed to update transaction",
       );
     } finally {
       setActionLoading(null);
@@ -135,7 +135,7 @@ const AllTransactions: React.FC = () => {
           (t) =>
             `${t.id},${t.method},"${t.user.name}",${t.amount},${
               t.status
-            },${new Date(t.createdAt).toLocaleDateString()}`
+            },${new Date(t.createdAt).toLocaleDateString()}`,
         )
         .join("\n");
 
@@ -204,14 +204,14 @@ const AllTransactions: React.FC = () => {
                   {tx.id.slice(-8).toUpperCase()}
                 </td>
                 <td className="px-4 py-2">{tx.method}</td>
-                <td className="px-4 py-2">{tx.user.name}</td>
+                <td className="px-4 py-2">{tx.from}</td>
                 <td className="px-4 py-2 font-semibold">
                   {formatCurrency(tx.amount)}
                 </td>
                 <td className="px-4 py-2">
                   <span
                     className={`px-2 py-1 rounded text-xs ${getStatusColor(
-                      tx.status
+                      tx.status,
                     )}`}
                   >
                     {tx.status.toUpperCase()}

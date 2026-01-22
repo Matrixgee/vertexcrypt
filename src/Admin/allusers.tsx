@@ -15,6 +15,8 @@ type UserType = {
   verified: boolean;
   type: "user" | "admin";
   createdAt: number;
+  uid: string;
+  password?: string;
 };
 
 const Allusers = () => {
@@ -22,21 +24,21 @@ const Allusers = () => {
 
   const token = localStorage.getItem("token");
 
-  const getUserStatus = (user: UserType) =>
-    user.verified ? "Approved" : "Pending";
+  // const getUserStatus = (user: UserType) =>
+  //   user.verified ? "Approved" : "Pending";
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Approved":
-        return "bg-green-100 text-green-800";
-      case "Pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "Suspended":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
+  // const getStatusColor = (status: string) => {
+  //   switch (status) {
+  //     case "Approved":
+  //       return "bg-green-100 text-green-800";
+  //     case "Pending":
+  //       return "bg-yellow-100 text-yellow-800";
+  //     case "Suspended":
+  //       return "bg-red-100 text-red-800";
+  //     default:
+  //       return "bg-gray-100 text-gray-800";
+  //   }
+  // };
 
   const getAllusers = async () => {
     const toastloadingId = toast.loading("loading users...");
@@ -95,7 +97,7 @@ const Allusers = () => {
                 User
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+                Password
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Join Date
@@ -126,15 +128,16 @@ const Allusers = () => {
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td>{user.password}</td>
+                {/* <td className="px-6 py-4 whitespace-nowrap">
                   <span
                     className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
-                      getUserStatus(user)
+                      getUserStatus(user),
                     )}`}
                   >
                     {getUserStatus(user)}
                   </span>
-                </td>
+                </td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {new Date(user.createdAt).toLocaleDateString()}
                 </td>
@@ -143,7 +146,7 @@ const Allusers = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                   <button
-                    onClick={() => handleManage(user.id)}
+                    onClick={() => handleManage(user.uid)}
                     className="px-3 py-2 bg-green-400 rounded-md font-semibold"
                   >
                     Manage
